@@ -62,3 +62,56 @@ The goal is to document code sufficiently to explain its purpose, intent, execut
 - Keep responses concise and task-focused.
 - Clearly identify the files involved and the exact actions required.
 - Mention blockers only when they genuinely prevent progress.
+
+## Testing Standards
+
+### General
+- Use risk-based testing. Prioritize business rules, security,
+  data integrity, error handling, and critical user workflows.
+- Do not create tests for every file or pursue arbitrary coverage
+  targets. Test meaningful behavior rather than implementation details.
+- Follow existing testing conventions and inspect relevant code
+  before deciding what needs testing.
+- Do not introduce duplicate application setups or unnecessary
+  testing dependencies.
+- Never claim tests passed unless they were actually executed.
+
+### Backend
+- Prioritize services, controllers, routes, validation, middleware,
+  database operations, and application integration.
+- Test successful operations, invalid inputs, failure paths,
+  authorization boundaries, and important edge cases.
+- Use the shared backend/tests/helpers/test-app.ts createTestApp()
+  helper for HTTP integration tests. It must use the production
+  createApp() implementation.
+- Do not create a separate Express application for HTTP tests.
+- Unit-test middleware without an Express app when no route or
+  HTTP behavior needs to be tested.
+- Use an isolated test database for database integration tests.
+- Checkout and inventory tests must account for MongoDB transaction
+  requirements, concurrent requests, reservation expiry, rollback,
+  and idempotency.
+- Payment tests must cover duplicate processing, invalid callbacks,
+  amount verification, and failed payment scenarios.
+
+### Frontend
+- Use Vitest and React Testing Library for component and feature tests.
+- Test observable behavior, user interactions, accessibility,
+  loading states, success states, and error states.
+- Test forms, API interactions, authentication flows, and critical
+  customer, seller, and administrator workflows.
+- Mock API responses in isolated frontend tests where appropriate.
+- Do not use frontend tests as proof of backend security or
+  business-rule correctness.
+- Introduce end-to-end browser tests when the project is ready
+  to verify complete workflows.
+
+### Implementation and Verification
+- When explicitly authorized to implement a feature, add or update
+  relevant tests as part of the implementation when appropriate.
+- When explicitly asked to implement tests, create and run them.
+- When the user requests manual instructions only, do not modify files;
+  provide the relevant commands and verification steps.
+- Run relevant tests and type checks after authorized changes.
+- Report what was tested, the commands executed, the results,
+  and any checks that could not be run.
