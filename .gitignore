@@ -1,0 +1,13 @@
+# Local environment variables and secrets
+**/.env
+**/.env.*
+!**/.env.example
+
+# Node.js dependencies and generated output
+node_modules/
+dist/
+coverage/
+
+# Local operating system files
+.DS_Store
+Thumbs.db
