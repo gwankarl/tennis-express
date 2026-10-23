@@ -1,1 +1,56 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 @import 'tailwindcss';
+
+@theme {
+  /* Brand and interface colors */
+  --color-primary: #176b45;
+  --color-secondary: #e8f3ed;
+  --color-page: #f7f8f7;
+  --color-surface: #ffffff;
+  --color-text-primary: #202923;
+  --color-text-secondary: #5f6b63;
+  --color-border: #d9deda;
+
+  /* Status colors */
+  --color-success: #18794e;
+  --color-success-background: #e8f5ec;
+  --color-warning: #946200;
+  --color-warning-background: #fff4d6;
+  --color-error: #b42318;
+  --color-error-background: #fdecea;
+  --color-information: #175cd3;
+  --color-information-background: #eff6ff;
+
+  /* Disabled controls */
+  --color-disabled-background: #e8ebe8;
+  --color-disabled-text: #737c75;
+
+  /* Font family and weights */
+  --font-sans:
+    'Inter', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  /* Named text sizes */
+  --text-page-title: 2rem;
+  --text-section-heading: 1.5rem;
+  --text-card-heading: 1rem;
+  --text-body: 1rem;
+  --text-supporting: 0.875rem;
+  --text-form-label: 0.875rem;
+  --text-form-error: 0.875rem;
+  --text-product-price: 1.5rem;
+  --text-compact-price: 1.125rem;
+}
+
+@layer base {
+  body {
+    background-color: var(--color-page);
+    color: var(--color-text-primary);
+    font-family: var(--font-sans);
+    font-size: var(--text-body);
+    font-weight: var(--font-weight-regular);
+  }
+}
