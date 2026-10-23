@@ -4,6 +4,7 @@ import { requestLogger } from './middleware/requestLogger.js';
 import helmet from 'helmet';
 import cors from 'cors';
 import { env } from './config/env.js';
+import { createV1Router } from './routes/v1/index.js';
 
 /**
  * Builds the Express application without starting a network listener.
@@ -16,7 +17,7 @@ export function createApp(): Express {
   app.use(helmet());
   app.use(
     cors({
-      origin: env.frontendOrigin,
+      origin: env.clientUrl,
       methods: ['GET', 'HEAD', 'POST', 'PUT', 'PATCH', 'DELETE'],
       allowedHeaders: ['Content-Type', 'Authorization'],
       exposedHeaders: ['X-Request-Id'],
@@ -30,6 +31,8 @@ export function createApp(): Express {
   app.get('/api/v1/health', (_request, response) => {
     response.status(200).json({ status: 'ok' });
   });
+
+  app.use('/api/v1', createV1Router());
 
   app.use(notFoundHandler);
   app.use(errorHandler);

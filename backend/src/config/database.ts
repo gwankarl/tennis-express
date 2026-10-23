@@ -14,7 +14,7 @@ mongoose.connection.on('reconnected', () => {
  * Rejects if the initial connection to the configured MongoDB server fails.
  */
 export async function connectDatabase(): Promise<void> {
-  await mongoose.connect(env.mongoUri);
+  await mongoose.connect(env.mongodbUri);
   console.info('Connected to MongoDB.');
 }
 

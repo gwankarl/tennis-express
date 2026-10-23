@@ -1,26 +1,19 @@
 import type { ErrorRequestHandler, RequestHandler } from 'express';
 import { ZodError } from 'zod';
+import { AppError } from '../shared/errors/AppError.js';
 import { logger } from '../shared/logger.js';
-
-/**
- * An expected HTTP error with a status and client-safe message.
- * Use it for errors that should be returned to the client, such as a missing route.
- */
-export class HttpError extends Error {
-  constructor(
-    public readonly statusCode: number,
-    message: string,
-  ) {
-    super(message);
-    this.name = 'HttpError';
-  }
-}
 
 /**
  * Forwards unmatched requests to the centralized error handler as 404 errors.
  */
 export const notFoundHandler: RequestHandler = (request, _response, next) => {
-  next(new HttpError(404, `Route ${request.method} ${request.originalUrl} was not found`));
+  next(
+    new AppError({
+      statusCode: 404,
+      code: 'ROUTE_NOT_FOUND',
+      message: 'Route was not found.',
+    }),
+  );
 };
 
 /**
@@ -45,29 +38,48 @@ export const errorHandler: ErrorRequestHandler = (error: unknown, _request, resp
     return;
   }
 
+  const appError = error instanceof AppError ? error : undefined;
   const isValidationError = error instanceof ZodError;
-  const isHttpError = error instanceof HttpError;
   const isPayloadTooLarge = isPayloadTooLargeError(error);
+  const isValidAppStatus =
+    appError !== undefined && appError.statusCode >= 400 && appError.statusCode <= 599;
 
   const statusCode = isPayloadTooLarge
     ? 413
     : isValidationError
       ? 400
-      : isHttpError && error.statusCode >= 400 && error.statusCode <= 599
-        ? error.statusCode
+      : isValidAppStatus
+        ? appError.statusCode
         : 500;
 
-  const message = isPayloadTooLarge
-    ? 'Request body is too large'
+  const code = isPayloadTooLarge
+    ? 'PAYLOAD_TOO_LARGE'
     : isValidationError
-      ? 'Request validation failed'
-      : isHttpError
-        ? error.message
+      ? 'REQUEST_VALIDATION_FAILED'
+      : appError
+        ? appError.code
+        : 'INTERNAL_SERVER_ERROR';
+
+  const message = isPayloadTooLarge
+    ? 'Request body is too large.'
+    : isValidationError
+      ? 'Request validation failed.'
+      : appError
+        ? statusCode >= 500 && process.env.NODE_ENV === 'production'
+          ? 'Internal server error.'
+          : appError.message
         : process.env.NODE_ENV === 'production'
-          ? 'Internal server error'
+          ? 'Internal server error.'
           : error instanceof Error
             ? error.message
-            : 'Internal server error';
+            : 'Internal server error.';
+
+  const details = isValidationError
+    ? error.issues.map((issue) => ({
+        field: issue.path.join('.'),
+        message: issue.message,
+      }))
+    : appError?.details;
 
   if (statusCode >= 500) {
     logger.error(
@@ -80,14 +92,11 @@ export const errorHandler: ErrorRequestHandler = (error: unknown, _request, resp
   }
 
   response.status(statusCode).json({
+    success: false,
     error: {
+      code,
       message,
-      ...(isValidationError && {
-        details: error.issues.map((issue) => ({
-          path: issue.path.join('.'),
-          message: issue.message,
-        })),
-      }),
+      ...(details && details.length > 0 && { details }),
     },
   });
 };
