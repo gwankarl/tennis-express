@@ -1,3 +1,4 @@
+import type { Ref } from 'react'
 import type { InputProps } from './Input'
 import { Input } from './Input'
 import { Label } from './Label'
@@ -8,6 +9,7 @@ interface FormFieldProps extends Omit<InputProps, 'id' | 'invalid' | 'aria-descr
   label: string
   hint?: string
   error?: string
+  inputRef?: Ref<HTMLInputElement>
 }
 
 /**
@@ -21,6 +23,7 @@ export function FormField({
   error,
   required,
   className = '',
+  inputRef,
   ...inputProps
 }: FormFieldProps) {
   const describedBy = [hint ? `${id}-hint` : undefined, error ? `${id}-error` : undefined]
@@ -34,6 +37,7 @@ export function FormField({
       </Label>
 
       <Input
+        ref={inputRef}
         {...inputProps}
         id={id}
         required={required}

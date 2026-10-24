@@ -1,8 +1,7 @@
-import { Link, Outlet } from 'react-router'
+import { Outlet } from 'react-router'
+import Header from '../navigation/Header'
 
-/**
- * Provides the shared public header, page area, and footer.
- */
+/** Provides the shared public header, page area, and footer. */
 export default function PublicLayout() {
   return (
     <div className="flex min-h-screen flex-col bg-page text-text-primary">
@@ -13,22 +12,7 @@ export default function PublicLayout() {
         Skip to main content
       </a>
 
-      <header className="border-b border-border bg-surface">
-        <div className="mx-auto flex w-full max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
-          <Link to="/" className="text-xl font-bold text-primary">
-            Tennis-Xpress
-          </Link>
-
-          <nav aria-label="Main navigation">
-            <Link
-              to="/"
-              className="text-supporting font-medium text-text-secondary hover:text-primary"
-            >
-              Home
-            </Link>
-          </nav>
-        </div>
-      </header>
+      <Header />
 
       <main id="main-content" className="mx-auto w-full max-w-7xl flex-1 px-4 py-8 sm:px-6 lg:px-8">
         <Outlet />

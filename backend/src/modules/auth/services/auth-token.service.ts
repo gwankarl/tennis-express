@@ -20,6 +20,17 @@ export interface AuthTokenPair {
   accessTokenExpiresIn: number;
 }
 
+/** Refreshed tokens and safe user details needed to restore frontend auth state. */
+export interface RefreshedAuthTokenPair extends AuthTokenPair {
+  user: {
+    id: string;
+    email: string;
+    userName: string;
+    roles: UserRole[];
+    status: string;
+  };
+}
+
 /** Coordinates session creation and authentication token issuance. */
 export class AuthTokenService {
   constructor(
@@ -66,7 +77,7 @@ export class AuthTokenService {
    * @param token - The refresh token supplied by the client.
    * @returns The replacement tokens and existing session identifier.
    */
-  async refreshToken(token: string): Promise<AuthTokenPair> {
+  async refreshToken(token: string): Promise<RefreshedAuthTokenPair> {
     const currentTokenHash = this.refreshTokenService.hashToken(token);
 
     const session = await this.sessionService.findValidSessionByRefreshTokenHash(currentTokenHash);
@@ -120,6 +131,13 @@ export class AuthTokenService {
       refreshToken: generatedRefreshToken.token,
       sessionId: rotatedSession._id.toString(),
       accessTokenExpiresIn: this.accessTokenService.getExpiresInSeconds(),
+      user: {
+        id: user._id.toString(),
+        email: user.email,
+        userName: user.profile.userName,
+        roles: user.roles,
+        status: user.status,
+      },
     };
   }
 

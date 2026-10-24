@@ -13,8 +13,7 @@ export interface LoginResult {
   user: {
     id: string;
     email: string;
-    firstName: string;
-    lastName: string;
+    userName: string;
     roles: string[];
     status: string;
   };
@@ -101,8 +100,7 @@ export class LoginService {
       user: {
         id: user._id.toString(),
         email: user.email,
-        firstName: user.profile.firstName,
-        lastName: user.profile.lastName,
+        userName: user.profile.userName,
         roles: user.roles,
         status: user.status,
       },

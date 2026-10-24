@@ -3,6 +3,7 @@ import { errorHandler, notFoundHandler } from './middleware/errorHandler.js';
 import { requestLogger } from './middleware/requestLogger.js';
 import helmet from 'helmet';
 import cors from 'cors';
+import cookieParser from 'cookie-parser';
 import { env } from './config/env.js';
 import { createV1Router } from './routes/v1/index.js';
 
@@ -13,11 +14,13 @@ import { createV1Router } from './routes/v1/index.js';
 export function createApp(): Express {
   const app = express();
 
+  app.use(cookieParser());
   app.use(requestLogger);
   app.use(helmet());
   app.use(
     cors({
       origin: env.clientUrl,
+      credentials: true,
       methods: ['GET', 'HEAD', 'POST', 'PUT', 'PATCH', 'DELETE'],
       allowedHeaders: ['Content-Type', 'Authorization'],
       exposedHeaders: ['X-Request-Id'],

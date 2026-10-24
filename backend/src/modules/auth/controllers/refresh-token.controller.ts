@@ -7,6 +7,8 @@ export async function refreshTokenController(req: Request, res: Response): Promi
   const authTokenService = new AuthTokenService();
   const refreshToken = req.cookies?.[REFRESH_TOKEN_COOKIE_NAME];
 
+  console.log(refreshToken);
+
   if (typeof refreshToken !== 'string' || refreshToken.length === 0) {
     return res.status(401).json({
       success: false,
@@ -27,6 +29,7 @@ export async function refreshTokenController(req: Request, res: Response): Promi
       accessToken: tokens.accessToken,
       tokenType: 'Bearer',
       expiresIn: tokens.accessTokenExpiresIn,
+      user: tokens.user,
     },
   });
 }
