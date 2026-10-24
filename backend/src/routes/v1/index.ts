@@ -8,7 +8,7 @@ export function createV1Router() {
 
   v1Router.use('/auth', createAuthRouter());
 
-  v1Router.use('/users', createUserAccountsRouter());
+  v1Router.use('/user', createUserAccountsRouter());
 
   return v1Router;
 }

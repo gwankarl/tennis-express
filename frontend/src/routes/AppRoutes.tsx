@@ -8,9 +8,10 @@ import LoginPage from '../pages/LoginPage'
 import NotFoundPage from '../pages/NotFoundPage'
 import RegistrationPage from '../pages/RegistrationPage'
 import ResetPasswordPage from '../pages/ResetPasswordPage'
-import CustomerDashboardPage from '../pages/customers/CustomerDashboardPage'
-import CustomerOrdersPage from '../pages/customers/CustomerOrdersPage'
 import ProtectedRoute from './ProtectedRoute'
+import UserSectionPage from '../pages/users/UserSectionPage'
+import UserDashboardPage from '../pages/users/UserDashboardPage'
+import UserProfilePage from '../pages/users/UserProfilePage'
 
 /** Organizes public and authenticated routes with a global not-found fallback. */
 export default function AppRoutes() {
@@ -32,14 +33,22 @@ export default function AppRoutes() {
             <WorkspaceLayout
               role="customer"
               navigationItems={[
-                { label: 'Dashboard', to: '/customer', end: true },
-                { label: 'Orders', to: '/customer/orders' },
+                { label: 'Overview', to: '/customer', end: true },
+                { label: 'My Orders', to: '/customer/orders', end: true },
+                { label: 'Wishlist', to: '/customer/wishlist', end: true },
+                { label: 'Messages', to: '/customer/messages', end: true },
+                { label: 'My Profile', to: '/customer/profile', end: true },
+                { label: 'Settings', to: '/customer/settings', end: true },
               ]}
             />
           }
         >
-          <Route index element={<CustomerDashboardPage />} />
-          <Route path="orders" element={<CustomerOrdersPage />} />
+          <Route index element={<UserDashboardPage />} />
+          <Route path="orders" element={<UserSectionPage title="Orders" />} />
+          <Route path="wishlist" element={<UserSectionPage title="Wishlist" />} />
+          <Route path="messages" element={<UserSectionPage title="Messages" />} />
+          <Route path="profile" element={<UserProfilePage />} />
+          <Route path="settings" element={<UserSectionPage title="Settings" />} />
         </Route>
       </Route>
 
