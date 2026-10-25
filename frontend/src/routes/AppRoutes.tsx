@@ -13,6 +13,8 @@ import UserSectionPage from '../pages/users/UserSectionPage'
 import UserDashboardPage from '../pages/users/UserDashboardPage'
 import UserProfilePage from '../pages/users/UserProfilePage'
 import SellerApplicationsPage from '../pages/users/SellerApplicationsPage'
+import AdminWorkspaceLayout from '../components/layout/AdminWorkspaceLayout'
+import AdminSellerApplicationsPage from '../pages/admin/AdminSellerApplicationsPage'
 
 /** Organizes public and authenticated routes with a global not-found fallback. */
 export default function AppRoutes() {
@@ -52,6 +54,21 @@ export default function AppRoutes() {
           <Route path="profile" element={<UserProfilePage />} />
           <Route path="seller-applications" element={<SellerApplicationsPage />} />
           <Route path="settings" element={<UserSectionPage title="Settings" />} />
+        </Route>
+      </Route>
+
+      <Route element={<ProtectedRoute requiredRole="admin" />}>
+        <Route path="admin" element={<AdminWorkspaceLayout />}>
+          <Route index element={<UserSectionPage title="Platform overview" />} />
+          <Route path="users" element={<UserSectionPage title="Users" />} />
+          <Route path="sellers" element={<UserSectionPage title="Sellers" />} />
+          <Route path="seller-applications" element={<AdminSellerApplicationsPage />} />
+          <Route path="products" element={<UserSectionPage title="Product moderation" />} />
+          <Route path="categories" element={<UserSectionPage title="Categories" />} />
+          <Route path="brands" element={<UserSectionPage title="Brands" />} />
+          <Route path="orders" element={<UserSectionPage title="Orders" />} />
+          <Route path="disputes" element={<UserSectionPage title="Disputes" />} />
+          <Route path="settings" element={<UserSectionPage title="Platform settings" />} />
         </Route>
       </Route>
 
