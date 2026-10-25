@@ -1,7 +1,7 @@
 import { createHash, randomBytes } from 'node:crypto';
 
 import { VerificationEmailSender } from '../types/registration.types.js';
-import { UserModel } from '../../users/models/user.model.js';
+import { UserModel } from '../../users/profiles/models/user.model.js';
 import { VerificationTokenModel } from '../models/verification-token.model.js';
 
 /** Verification tokens remain valid for 24 hours. */

@@ -1,7 +1,7 @@
 import type { RequestHandler } from 'express';
 
 import { CurrentUserService } from '../services/current-user.service.js';
-import { AppError } from '../../../shared/errors/AppError.js';
+import { AppError } from '../../../../shared/errors/AppError.js';
 
 /** Creates a controller that returns the authenticated user's account. */
 export function createCurrentUserController(): RequestHandler {

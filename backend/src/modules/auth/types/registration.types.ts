@@ -1,4 +1,4 @@
-import { UserStatus } from '../../users/types/user.types.js';
+import { UserStatus } from '../../users/profiles/types/user.types.js';
 
 /**
  * Input required by the registration service.

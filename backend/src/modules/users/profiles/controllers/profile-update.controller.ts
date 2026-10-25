@@ -1,7 +1,7 @@
 import type { NextFunction, Request, Response } from 'express';
 
 import { ProfileUpdateService } from '../services/profile-update.service.js';
-import { AppError } from '../../../shared/errors/AppError.js';
+import { AppError } from '../../../../shared/errors/AppError.js';
 import { ProfileUpdateRequest } from '../schemas/profile-update.schema.js';
 
 /** Creates the profile-update request handler. */

@@ -12,6 +12,7 @@ import ProtectedRoute from './ProtectedRoute'
 import UserSectionPage from '../pages/users/UserSectionPage'
 import UserDashboardPage from '../pages/users/UserDashboardPage'
 import UserProfilePage from '../pages/users/UserProfilePage'
+import SellerApplicationsPage from '../pages/users/SellerApplicationsPage'
 
 /** Organizes public and authenticated routes with a global not-found fallback. */
 export default function AppRoutes() {
@@ -38,6 +39,7 @@ export default function AppRoutes() {
                 { label: 'Wishlist', to: '/customer/wishlist', end: true },
                 { label: 'Messages', to: '/customer/messages', end: true },
                 { label: 'My Profile', to: '/customer/profile', end: true },
+                { label: 'Seller Applications', to: '/customer/seller-applications', end: true },
                 { label: 'Settings', to: '/customer/settings', end: true },
               ]}
             />
@@ -48,6 +50,7 @@ export default function AppRoutes() {
           <Route path="wishlist" element={<UserSectionPage title="Wishlist" />} />
           <Route path="messages" element={<UserSectionPage title="Messages" />} />
           <Route path="profile" element={<UserProfilePage />} />
+          <Route path="seller-applications" element={<SellerApplicationsPage />} />
           <Route path="settings" element={<UserSectionPage title="Settings" />} />
         </Route>
       </Route>

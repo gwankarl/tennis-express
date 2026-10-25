@@ -1,5 +1,5 @@
 import { AppError } from '../../../shared/errors/AppError.js';
-import { UserModel } from '../../users/models/user.model.js';
+import { UserModel } from '../../users/profiles/models/user.model.js';
 
 /** Verified identity claims extracted from a Google ID token. */
 export interface GoogleIdentity {

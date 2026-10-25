@@ -1,6 +1,6 @@
 import { createHash } from 'node:crypto';
 import { AppError } from '../../../shared/errors/AppError.js';
-import { UserModel } from '../../users/models/user.model.js';
+import { UserModel } from '../../users/profiles/models/user.model.js';
 import { VerificationTokenModel } from '../models/verification-token.model.js';
 
 /** Matches the 32-byte hexadecimal tokens generated during registration. */

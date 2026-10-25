@@ -2,7 +2,7 @@ import { createHash, randomBytes } from 'node:crypto';
 import { env } from '../../../config/env.js';
 
 import { PasswordResetTokenModel } from '../models/password-reset-token.model.js';
-import { UserModel } from '../../users/models/user.model.js';
+import { UserModel } from '../../users/profiles/models/user.model.js';
 import { PasswordResetEmailSender } from '../types/registration.types.js';
 
 export interface ForgotPasswordServiceDependencies {

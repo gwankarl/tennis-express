@@ -1,7 +1,7 @@
 import { env } from '../../../config/env.js';
 import { AppError } from '../../../shared/errors/AppError.js';
-import { UserModel } from '../../users/models/user.model.js';
-import { UserRole } from '../../users/types/user.types.js';
+import { UserModel } from '../../users/profiles/models/user.model.js';
+import { UserRole } from '../../users/profiles/types/user.types.js';
 import { AccessTokenService } from './access-token.service.js';
 import { RefreshTokenService } from './refresh-token.service.js';
 import { SessionService } from './session.service.js';

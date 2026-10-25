@@ -6,7 +6,7 @@ import {
   AccountDeletionRequestModel,
   AccountDeletionRequestStatus,
 } from '../models/account-deletion-request.model.js';
-import { AppError } from '../../../shared/errors/AppError.js';
+import { AppError } from '../../../../shared/errors/AppError.js';
 
 /*
  * The cancellation window begins only after eligibility has been confirmed.

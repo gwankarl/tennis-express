@@ -1,6 +1,6 @@
 import type { RequestHandler } from 'express';
 
-import { AppError } from '../../../shared/errors/AppError.js';
+import { AppError } from '../../../../shared/errors/AppError.js';
 import { ProfileImageUpdateService } from '../services/profile-image-update.service.js';
 
 /** Creates the profile-image upload request handler. */

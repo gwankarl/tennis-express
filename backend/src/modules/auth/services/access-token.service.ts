@@ -1,7 +1,7 @@
 import jwt, { type JwtPayload } from 'jsonwebtoken';
 import { randomUUID } from 'node:crypto';
 import { env } from '../../../config/env.js';
-import { USER_ROLES, UserRole } from '../../users/types/user.types.js';
+import { USER_ROLES, UserRole } from '../../users/profiles/types/user.types.js';
 
 /** Data required to issue an access token. */
 export interface CreateAccessTokenInput {

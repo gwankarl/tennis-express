@@ -1,7 +1,7 @@
 import { randomUUID } from 'node:crypto';
-import { cloudinary } from '../../../config/cloudinary.js';
+import { cloudinary } from '../../../../config/cloudinary.js';
 import { UserImageReference } from '../types/user.types.js';
-import { AppError } from '../../../shared/errors/AppError.js';
+import { AppError } from '../../../../shared/errors/AppError.js';
 
 interface UploadProfileImageInput {
   buffer: Buffer;

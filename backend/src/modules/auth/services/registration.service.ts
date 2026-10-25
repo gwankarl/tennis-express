@@ -6,7 +6,7 @@ import {
   PasswordCompromiseChecker,
   VerificationEmailSender,
 } from '../types/registration.types.js';
-import { UserModel } from '../../users/models/user.model.js';
+import { UserModel } from '../../users/profiles/models/user.model.js';
 import { VerificationTokenModel } from '../models/verification-token.model.js';
 import { AppError } from '../../../shared/errors/AppError.js';
 

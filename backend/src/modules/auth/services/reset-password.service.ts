@@ -6,7 +6,7 @@ import { PwnedPasswordCompromiseChecker } from './pwned-password-compromise.chec
 import { SessionService } from './session.service.js';
 import { PasswordResetTokenModel } from '../models/password-reset-token.model.js';
 import { AppError } from '../../../shared/errors/AppError.js';
-import { UserModel } from '../../users/models/user.model.js';
+import { UserModel } from '../../users/profiles/models/user.model.js';
 
 export interface ResetPasswordServiceDependencies {
   passwordHasher?: Argon2PasswordHasher;

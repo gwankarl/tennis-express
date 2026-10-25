@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-import { AppError } from '../../../shared/errors/AppError.js';
+import { AppError } from '../../../../shared/errors/AppError.js';
 import { CurrentUserResponse } from '../types/current-user.types.js';
 import { UserModel } from '../models/user.model.js';
 import { UserImageReference } from '../types/user.types.js';

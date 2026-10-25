@@ -1,7 +1,7 @@
 import type { RequestHandler } from 'express';
 
 import { AccountDeletionRequestService } from '../services/account-deletion-request.service.js';
-import { AppError } from '../../../shared/errors/AppError.js';
+import { AppError } from '../../../../shared/errors/AppError.js';
 
 /* Creates a controller for managing the authenticated user's deletion request. */
 export function createAccountDeletionRequestController(): {

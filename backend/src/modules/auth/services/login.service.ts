@@ -1,5 +1,5 @@
 import { AppError } from '../../../shared/errors/AppError.js';
-import { UserModel } from '../../users/models/user.model.js';
+import { UserModel } from '../../users/profiles/models/user.model.js';
 import { PasswordHasher } from '../types/registration.types.js';
 
 /** Input required to authenticate an existing account. */

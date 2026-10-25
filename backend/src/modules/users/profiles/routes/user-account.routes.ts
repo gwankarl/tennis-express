@@ -1,15 +1,15 @@
 import { Router } from 'express';
 
-import { createRequireAuthentication } from '../../../middleware/auth/require-authentication.js';
-import { validateBody } from '../../../middleware/validateBody.js';
+import { createRequireAuthentication } from '../../../../middleware/auth/require-authentication.js';
+import { validateBody } from '../../../../middleware/validateBody.js';
 
 import { createCurrentUserController } from '../controllers/current-user.controller.js';
 
 import { profileUpdateSchema } from '../schemas/profile-update.schema.js';
 import { createProfileUpdateController } from '../controllers/profile-update.controller.js';
 
-import { uploadImage } from '../../../middleware/image-uploads/image-upload.middleware.js';
-import { validateImageContent } from '../../../middleware/image-uploads/image-content.validation.middleware.js';
+import { uploadImage } from '../../../../middleware/image-uploads/image-upload.middleware.js';
+import { validateImageContent } from '../../../../middleware/image-uploads/image-content.validation.middleware.js';
 import { createProfileImageUploadController } from '../controllers/profile-image-upload.controller.js';
 
 import { createAccountDeletionRequestController } from '../controllers/account-deletion-request.controller.js';

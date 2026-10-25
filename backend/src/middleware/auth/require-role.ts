@@ -1,7 +1,7 @@
 import type { RequestHandler } from 'express';
 
 import { AppError } from '../../shared/errors/AppError.js';
-import { UserRole } from '../../modules/users/types/user.types.js';
+import { UserRole } from '../../modules/users/profiles/types/user.types.js';
 
 /**
  * Creates middleware that authorizes an authenticated user
