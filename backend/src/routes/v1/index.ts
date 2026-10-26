@@ -5,6 +5,7 @@ import { createUserAccountsRouter } from '../../modules/users/profiles/routes/us
 import { createSellerApplicationsRouter } from '../../modules/users/seller-applications/routes/seller-applications.routes.js';
 import { createAdminSellerApplicationReviewRouter } from '../../modules/admin/seller-application/routes/seller-application-review.routes.js';
 import { createCategoryManagementRouter } from '../../modules/admin/categories/routes/category-management.routes.js';
+import { createBrandManagementRouter } from '../../modules/admin/brands/routes/brand-management.routes.js';
 
 export function createV1Router() {
   const v1Router = Router();
@@ -18,6 +19,8 @@ export function createV1Router() {
   v1Router.use('/admin/seller-applications', createAdminSellerApplicationReviewRouter());
 
   v1Router.use('/admin/categories', createCategoryManagementRouter());
+
+  v1Router.use('/admin/brands', createBrandManagementRouter());
 
   return v1Router;
 }
