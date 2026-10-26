@@ -6,21 +6,30 @@ import { createSellerApplicationsRouter } from '../../modules/users/seller-appli
 import { createAdminSellerApplicationReviewRouter } from '../../modules/admin/seller-application/routes/seller-application-review.routes.js';
 import { createCategoryManagementRouter } from '../../modules/admin/categories/routes/category-management.routes.js';
 import { createBrandManagementRouter } from '../../modules/admin/brands/routes/brand-management.routes.js';
+import { createSellerStoreRouter } from '../../modules/sellers/store/routes/seller-store.routes.js';
+import { createPublicStoresRouter } from '../../modules/stores/routes/public-store.routes.js';
+import { createAdminStoreRouter } from '../../modules/admin/stores/routes/admin-store.routes.js';
 
 export function createV1Router() {
   const v1Router = Router();
 
   v1Router.use('/auth', createAuthRouter());
 
+  v1Router.use('/stores', createPublicStoresRouter());
+
   v1Router.use('/user', createUserAccountsRouter());
 
   v1Router.use('/seller-applications', createSellerApplicationsRouter());
+
+  v1Router.use('/seller/store', createSellerStoreRouter());
 
   v1Router.use('/admin/seller-applications', createAdminSellerApplicationReviewRouter());
 
   v1Router.use('/admin/categories', createCategoryManagementRouter());
 
   v1Router.use('/admin/brands', createBrandManagementRouter());
+
+  v1Router.use('/admin/stores', createAdminStoreRouter());
 
   return v1Router;
 }
