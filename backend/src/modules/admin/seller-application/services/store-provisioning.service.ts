@@ -4,7 +4,7 @@ import type { ClientSession } from 'mongoose';
 import { AppError } from '../../../../shared/errors/AppError.js';
 import { StoreModel } from '../models/store.model.js';
 
-import { Store, StoreLocation, StoreStatus } from '../types/store.types.js';
+import { Store, StoreLocation } from '../types/store.types.js';
 import type { SellerApplicationFulfilmentDetails } from '../../../users/seller-applications/types/seller-application.types.js';
 
 export interface ProvisionStoreInput {

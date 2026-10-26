@@ -15,6 +15,7 @@ import UserProfilePage from '../pages/users/UserProfilePage'
 import SellerApplicationsPage from '../pages/users/SellerApplicationsPage'
 import AdminWorkspaceLayout from '../components/layout/AdminWorkspaceLayout'
 import AdminSellerApplicationsPage from '../pages/admin/AdminSellerApplicationsPage'
+import AdminCategoriesPage from '../pages/admin/AdminCategoriesPage'
 
 /** Organizes public and authenticated routes with a global not-found fallback. */
 export default function AppRoutes() {
@@ -64,7 +65,7 @@ export default function AppRoutes() {
           <Route path="sellers" element={<UserSectionPage title="Sellers" />} />
           <Route path="seller-applications" element={<AdminSellerApplicationsPage />} />
           <Route path="products" element={<UserSectionPage title="Product moderation" />} />
-          <Route path="categories" element={<UserSectionPage title="Categories" />} />
+          <Route path="categories" element={<AdminCategoriesPage />} />
           <Route path="brands" element={<UserSectionPage title="Brands" />} />
           <Route path="orders" element={<UserSectionPage title="Orders" />} />
           <Route path="disputes" element={<UserSectionPage title="Disputes" />} />
