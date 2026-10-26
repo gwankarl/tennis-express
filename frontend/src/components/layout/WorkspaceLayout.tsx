@@ -1,4 +1,5 @@
 import { Link, NavLink, Outlet } from 'react-router'
+import type { IconType } from 'react-icons'
 import LogoutButton from './LogoutButton'
 
 export type WorkspaceRole = 'customer' | 'seller' | 'admin'
@@ -6,6 +7,7 @@ export type WorkspaceRole = 'customer' | 'seller' | 'admin'
 export interface WorkspaceNavigationItem {
   label: string
   to: string
+  Icon?: IconType
   /** Set true when the link should be active only at its exact path. */
   end?: boolean
 }
@@ -56,14 +58,14 @@ export default function WorkspaceLayout({ role, navigationItems }: WorkspaceLayo
           className="border-b border-border bg-surface lg:w-60 lg:shrink-0 lg:border-b-0 lg:border-r"
         >
           <div className="flex gap-2 overflow-x-auto px-4 py-3 sm:px-6 lg:sticky lg:top-0 lg:flex-col lg:overflow-visible lg:px-4 lg:py-8">
-            {navigationItems.map((item) => (
+            {navigationItems.map(({ label, to, end, Icon }) => (
               <NavLink
-                key={item.to}
-                to={item.to}
-                end={item.end}
+                key={to}
+                to={to}
+                end={end}
                 className={({ isActive }) =>
                   [
-                    'shrink-0 rounded-md px-3 py-2 text-supporting font-medium transition-colors',
+                    'inline-flex shrink-0 items-center gap-3 rounded-md px-3 py-2 text-supporting font-medium transition-colors',
                     'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2',
                     isActive
                       ? 'bg-secondary text-primary'
@@ -71,7 +73,8 @@ export default function WorkspaceLayout({ role, navigationItems }: WorkspaceLayo
                   ].join(' ')
                 }
               >
-                {item.label}
+                {Icon ? <Icon aria-hidden="true" className="size-5 shrink-0" /> : null}
+                <span>{label}</span>
               </NavLink>
             ))}
           </div>
