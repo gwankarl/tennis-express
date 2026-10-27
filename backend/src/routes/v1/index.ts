@@ -11,6 +11,8 @@ import { createPublicStoresRouter } from '../../modules/stores/routes/public-sto
 import { createAdminStoreRouter } from '../../modules/admin/stores/routes/admin-store.routes.js';
 import { createSellerProductsRouter } from '../../modules/sellers/products/management/routes/seller-products.routes.js';
 import { createAdminProductModerationRouter } from '../../modules/admin/products/moderation/routes/admin-product-moderation.routes.js';
+import { createSellerPromotionsRouter } from '../../modules/sellers/promotions/routes/seller-promotion.routes.js';
+import { createAdminPromotionsRouter } from '../../modules/admin/promotions/routes/admin-promotion.routes.js';
 
 export function createV1Router() {
   const v1Router = Router();
@@ -27,6 +29,8 @@ export function createV1Router() {
 
   v1Router.use('/seller/products', createSellerProductsRouter());
 
+  v1Router.use('/seller/promotions', createSellerPromotionsRouter());
+
   v1Router.use('/admin/seller-applications', createAdminSellerApplicationReviewRouter());
 
   v1Router.use('/admin/categories', createCategoryManagementRouter());
@@ -36,6 +40,8 @@ export function createV1Router() {
   v1Router.use('/admin/stores', createAdminStoreRouter());
 
   v1Router.use('/admin/products', createAdminProductModerationRouter());
+
+  v1Router.use('/admin/promotions', createAdminPromotionsRouter());
 
   return v1Router;
 }
