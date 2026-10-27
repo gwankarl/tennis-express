@@ -1,10 +1,10 @@
 import { Router } from 'express';
 
-import { createRequireAuthentication } from '../../../../middleware/auth/require-authentication.js';
-import { createRequireRole } from '../../../../middleware/auth/require-role.js';
-import { validateBody } from '../../../../middleware/validateBody.js';
-import { validateQuery } from '../../../../middleware/validateQuery.js';
-import { validateParams } from '../../../../middleware/validateParams.js';
+import { createRequireAuthentication } from '../../../../../middleware/auth/require-authentication.js';
+import { createRequireRole } from '../../../../../middleware/auth/require-role.js';
+import { validateBody } from '../../../../../middleware/validateBody.js';
+import { validateQuery } from '../../../../../middleware/validateQuery.js';
+import { validateParams } from '../../../../../middleware/validateParams.js';
 import {
   archiveSellerProduct,
   createProductDraft,
@@ -20,11 +20,14 @@ import {
   updateSellerProductSchema,
 } from '../schemas/product.schema.js';
 
+import { createProductVariantRouter } from '../../variants/routes/product-variant.routes.js';
+
 /** Creates authenticated seller product endpoints. */
 export function createSellerProductsRouter(): Router {
   const router = Router();
 
   router.use(createRequireAuthentication(), createRequireRole(['seller']));
+  router.use(createProductVariantRouter());
 
   router.get('/', validateQuery(listSellerProductsQuerySchema), listSellerProducts);
 

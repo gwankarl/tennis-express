@@ -1,9 +1,9 @@
 import mongoose from 'mongoose';
 
-import { AppError } from '../../../../shared/errors/AppError.js';
-import { UserModel } from '../../../users/profiles/models/user.model.js';
-import { SellerApplicationModel } from '../../../users/seller-applications/models/seller-application.model.js';
-import { StoreModel } from '../../store/models/store.model.js';
+import { AppError } from '../../../../../shared/errors/AppError.js';
+import { UserModel } from '../../../../users/profiles/models/user.model.js';
+import { SellerApplicationModel } from '../../../../users/seller-applications/models/seller-application.model.js';
+import { StoreModel } from '../../../store/models/store.model.js';
 import { ProductModel } from '../models/product.model.js';
 import type { CreateProductDraftRequest } from '../schemas/product.schema.js';
 import type { Product } from '../types/product.types.js';
@@ -75,6 +75,7 @@ export class ProductDraftService {
             brandId: input.brandId === null ? null : new mongoose.Types.ObjectId(input.brandId),
           }),
       ...(input.condition === undefined ? {} : { condition: input.condition }),
+      options: input.options ?? [],
       attributes: input.attributes ?? {},
       moderationStatus: 'not_submitted',
       publicationStatus: 'draft',

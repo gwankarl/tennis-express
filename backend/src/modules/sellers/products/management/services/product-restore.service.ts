@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-import { AppError } from '../../../../shared/errors/AppError.js';
+import { AppError } from '../../../../../shared/errors/AppError.js';
 import { ProductModel } from '../models/product.model.js';
 import type { Product } from '../types/product.types.js';
 

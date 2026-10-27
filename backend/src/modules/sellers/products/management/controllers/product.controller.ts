@@ -1,6 +1,6 @@
 import type { RequestHandler } from 'express';
 
-import { AppError } from '../../../../shared/errors/AppError.js';
+import { AppError } from '../../../../../shared/errors/AppError.js';
 import type {
   CreateProductDraftRequest,
   ListSellerProductsQuery,

@@ -9,7 +9,7 @@ import { createBrandManagementRouter } from '../../modules/admin/brands/routes/b
 import { createSellerStoreRouter } from '../../modules/sellers/store/routes/seller-store.routes.js';
 import { createPublicStoresRouter } from '../../modules/stores/routes/public-store.routes.js';
 import { createAdminStoreRouter } from '../../modules/admin/stores/routes/admin-store.routes.js';
-import { createSellerProductsRouter } from '../../modules/sellers/products/routes/seller-products.routes.js';
+import { createSellerProductsRouter } from '../../modules/sellers/products/management/routes/seller-products.routes.js';
 
 export function createV1Router() {
   const v1Router = Router();

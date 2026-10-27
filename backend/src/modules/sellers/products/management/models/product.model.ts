@@ -4,6 +4,7 @@ import {
   PRODUCT_CONDITIONS,
   PRODUCT_MODERATION_STATUSES,
   PRODUCT_PUBLICATION_STATUSES,
+  type ProductOptionDefinition,
   type Product,
 } from '../types/product.types.js';
 
@@ -42,6 +43,33 @@ const ProductImageSchema = new Schema(
   {
     timestamps: false,
   },
+);
+
+const ProductOptionDefinitionSchema = new Schema<ProductOptionDefinition>(
+  {
+    name: {
+      type: String,
+      required: true,
+      trim: true,
+      minlength: 1,
+    },
+    values: {
+      type: [String],
+      required: true,
+      validate: {
+        validator(values: string[]) {
+          const normalizedValues = values.map((value) => value.trim().toLowerCase());
+          return (
+            values.length > 0 &&
+            values.every((value) => value.trim().length > 0) &&
+            new Set(normalizedValues).size === normalizedValues.length
+          );
+        },
+        message: 'Option values must be nonempty and unique.',
+      },
+    },
+  },
+  { _id: false },
 );
 
 const ProductSchema = new Schema<Product>(
@@ -105,6 +133,18 @@ const ProductSchema = new Schema<Product>(
           return images.filter((image) => image.isPrimary).length <= 1;
         },
         message: 'A product can have at most one primary image.',
+      },
+    },
+
+    options: {
+      type: [ProductOptionDefinitionSchema],
+      default: [],
+      validate: {
+        validator(options: ProductOptionDefinition[]) {
+          const normalizedNames = options.map((option) => option.name.trim().toLowerCase());
+          return new Set(normalizedNames).size === normalizedNames.length;
+        },
+        message: 'Product option names must be unique.',
       },
     },
 

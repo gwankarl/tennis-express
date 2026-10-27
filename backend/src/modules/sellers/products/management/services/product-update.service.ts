@@ -1,8 +1,9 @@
 import mongoose from 'mongoose';
-import { AppError } from '../../../../shared/errors/AppError.js';
+import { AppError } from '../../../../../shared/errors/AppError.js';
 import { ProductModel } from '../models/product.model.js';
 import type { Product } from '../types/product.types.js';
 import type { UpdateSellerProductRequest } from '../schemas/product.schema.js';
+import { ProductVariantModel } from '../../variants/models/product-variant.model.js';
 
 /** Updates editable fields on a product owned by the seller. */
 export class ProductUpdateService {
@@ -36,6 +37,20 @@ export class ProductUpdateService {
         code: 'PRODUCT_NOT_FOUND',
         message: 'Product not found.',
       });
+    }
+
+    if (changes.options !== undefined) {
+      const hasVariants = await ProductVariantModel.exists({ productId: product._id });
+
+      if (hasVariants) {
+        throw new AppError({
+          statusCode: 409,
+          code: 'PRODUCT_OPTIONS_LOCKED',
+          message: 'Product options cannot be changed after variants have been created.',
+        });
+      }
+
+      product.options = changes.options;
     }
 
     if (changes.name !== undefined) product.name = changes.name;

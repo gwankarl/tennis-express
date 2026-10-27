@@ -4,8 +4,8 @@ import {
   buildPaginationMetadata,
   getPaginationOffset,
   type PaginationMetadata,
-} from '../../../../shared/pagination.js';
-import { AppError } from '../../../../shared/errors/AppError.js';
+} from '../../../../../shared/pagination.js';
+import { AppError } from '../../../../../shared/errors/AppError.js';
 import { ProductModel } from '../models/product.model.js';
 import type { ListSellerProductsQuery } from '../schemas/product.schema.js';
 import type { Product } from '../types/product.types.js';

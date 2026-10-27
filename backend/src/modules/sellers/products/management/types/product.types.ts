@@ -14,6 +14,12 @@ export type ProductModerationStatus = (typeof PRODUCT_MODERATION_STATUSES)[numbe
 export const PRODUCT_PUBLICATION_STATUSES = ['draft', 'published', 'archived'] as const;
 export type ProductPublicationStatus = (typeof PRODUCT_PUBLICATION_STATUSES)[number];
 
+/** A selectable option and its allowed values for a product. */
+export interface ProductOptionDefinition {
+  name: string;
+  values: string[];
+}
+
 export interface ProductImage {
   _id?: Types.ObjectId;
   publicId: string;
@@ -39,6 +45,7 @@ export interface Product {
   attributes: Record<string, unknown>;
   images: ProductImage[];
 
+  options: ProductOptionDefinition[];
   moderationStatus: ProductModerationStatus;
   publicationStatus: ProductPublicationStatus;
 
@@ -57,6 +64,7 @@ export interface CreateProductDraftInput {
   categoryId?: string;
   brandId?: string | null;
   condition?: ProductCondition;
+  options?: ProductOptionDefinition[];
   attributes?: Record<string, unknown>;
 }
 
@@ -70,5 +78,6 @@ export interface UpdateProductInput {
   categoryId?: string;
   brandId?: string | null;
   condition?: ProductCondition;
+  options?: ProductOptionDefinition[];
   attributes?: Record<string, unknown>;
 }
