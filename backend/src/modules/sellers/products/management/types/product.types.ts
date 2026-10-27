@@ -21,13 +21,16 @@ export interface ProductOptionDefinition {
 }
 
 export interface ProductImage {
-  _id?: Types.ObjectId;
+  _id: Types.ObjectId;
   publicId: string;
   secureUrl: string;
   altText: string;
   isPrimary: boolean;
   sortOrder: number;
 }
+
+/** Image fields prepared by the server before Mongoose assigns its subdocument ID. */
+export type ProductImageInput = Omit<ProductImage, '_id'>;
 
 export interface Product {
   _id: Types.ObjectId;

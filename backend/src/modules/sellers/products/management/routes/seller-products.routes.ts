@@ -21,13 +21,16 @@ import {
 } from '../schemas/product.schema.js';
 
 import { createProductVariantRouter } from '../../variants/routes/product-variant.routes.js';
+import { createProductImageRouter } from '../../images/routes/product-image.routes.js';
 
 /** Creates authenticated seller product endpoints. */
 export function createSellerProductsRouter(): Router {
   const router = Router();
 
   router.use(createRequireAuthentication(), createRequireRole(['seller']));
+
   router.use(createProductVariantRouter());
+  router.use(createProductImageRouter());
 
   router.get('/', validateQuery(listSellerProductsQuerySchema), listSellerProducts);
 
