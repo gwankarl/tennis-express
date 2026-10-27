@@ -4,6 +4,8 @@ import {
   PRODUCT_CONDITIONS,
   PRODUCT_MODERATION_STATUSES,
   PRODUCT_PUBLICATION_STATUSES,
+  PRODUCT_MODERATION_ACTIONS,
+  type ProductModerationEvent,
   type ProductOptionDefinition,
   type Product,
 } from '../types/product.types.js';
@@ -43,6 +45,33 @@ const ProductImageSchema = new Schema(
   {
     timestamps: false,
   },
+);
+
+const ProductModerationEventSchema = new Schema<ProductModerationEvent>(
+  {
+    action: {
+      type: String,
+      enum: PRODUCT_MODERATION_ACTIONS,
+      required: true,
+    },
+    actorId: {
+      type: Schema.Types.ObjectId,
+      ref: 'User',
+      required: true,
+    },
+    reason: {
+      type: String,
+      trim: true,
+      default: null,
+      maxlength: 2000,
+    },
+    createdAt: {
+      type: Date,
+      required: true,
+      default: Date.now,
+    },
+  },
+  { _id: false },
 );
 
 const ProductOptionDefinitionSchema = new Schema<ProductOptionDefinition>(
@@ -87,7 +116,6 @@ const ProductSchema = new Schema<Product>(
       index: true,
     },
 
-    // These fields can be completed after the draft is created.
     name: {
       type: String,
       trim: true,
@@ -164,6 +192,29 @@ const ProductSchema = new Schema<Product>(
       type: Date,
       default: null,
     },
+    submittedAt: {
+      type: Date,
+      default: null,
+    },
+    reviewedBy: {
+      type: Schema.Types.ObjectId,
+      ref: 'User',
+      default: null,
+    },
+    reviewedAt: {
+      type: Date,
+      default: null,
+    },
+    moderationReason: {
+      type: String,
+      trim: true,
+      default: null,
+      maxlength: 2000,
+    },
+    moderationHistory: {
+      type: [ProductModerationEventSchema],
+      default: [],
+    },
   },
   {
     timestamps: true,
@@ -192,6 +243,12 @@ ProductSchema.index({
   moderationStatus: 1,
   publicationStatus: 1,
   createdAt: -1,
+});
+
+ProductSchema.index({
+  moderationStatus: 1,
+  submittedAt: -1,
+  _id: -1,
 });
 
 export const ProductModel =

@@ -6,13 +6,15 @@ import type {
   ListSellerProductsQuery,
   SellerProductIdParams,
 } from '../schemas/product.schema.js';
+import type { UpdateSellerProductRequest } from '../schemas/product.schema.js';
+
 import { ProductDraftService } from '../services/product-draft.service.js';
 import { ProductListService } from '../services/product-list.service.js';
 import { ProductDetailService } from '../services/product-detail.service.js';
-import type { UpdateSellerProductRequest } from '../schemas/product.schema.js';
 import { ProductUpdateService } from '../services/product-update.service.js';
 import { ProductArchiveService } from '../services/product-archive.service.js';
 import { ProductRestoreService } from '../services/product-restore.service.js';
+import { ProductSubmissionService } from '../services/product-submission.service.js';
 
 const productDraftService = new ProductDraftService();
 const productListService = new ProductListService();
@@ -20,6 +22,7 @@ const productDetailService = new ProductDetailService();
 const productUpdateService = new ProductUpdateService();
 const productArchiveService = new ProductArchiveService();
 const productRestoreService = new ProductRestoreService();
+const productSubmissionService = new ProductSubmissionService();
 
 /** Creates a product draft for the authenticated seller. */
 export const createProductDraft: RequestHandler = async (req, res, next) => {
@@ -156,6 +159,29 @@ export const restoreSellerProduct: RequestHandler = async (req, res, next) => {
 
     const { productId } = req.params as unknown as SellerProductIdParams;
     const product = await productRestoreService.restoreOwnProduct(req.auth.userId, productId);
+
+    res.status(200).json({
+      success: true,
+      data: { product },
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+/** Submits the authenticated seller's product for administrator moderation. */
+export const submitSellerProduct: RequestHandler = async (req, res, next) => {
+  try {
+    if (!req.auth?.userId) {
+      throw new AppError({
+        statusCode: 401,
+        code: 'AUTHENTICATION_REQUIRED',
+        message: 'Authentication is required to submit a product.',
+      });
+    }
+
+    const { productId } = req.params as unknown as SellerProductIdParams;
+    const product = await productSubmissionService.submitOwnProduct(req.auth.userId, productId);
 
     res.status(200).json({
       success: true,

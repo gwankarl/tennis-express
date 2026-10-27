@@ -8,8 +8,27 @@ export const PRODUCT_MODERATION_STATUSES = [
   'pending',
   'approved',
   'rejected',
+  'changes_requested',
 ] as const;
 export type ProductModerationStatus = (typeof PRODUCT_MODERATION_STATUSES)[number];
+
+export const PRODUCT_MODERATION_ACTIONS = [
+  'submitted',
+  'resubmitted',
+  'approved',
+  'rejected',
+  'changes_requested',
+] as const;
+
+export type ProductModerationAction = (typeof PRODUCT_MODERATION_ACTIONS)[number];
+
+/** Records a submission or moderation decision and the user who performed it. */
+export interface ProductModerationEvent {
+  action: ProductModerationAction;
+  actorId: Types.ObjectId;
+  reason: string | null;
+  createdAt: Date;
+}
 
 export const PRODUCT_PUBLICATION_STATUSES = ['draft', 'published', 'archived'] as const;
 export type ProductPublicationStatus = (typeof PRODUCT_PUBLICATION_STATUSES)[number];
@@ -55,6 +74,12 @@ export interface Product {
   createdAt: Date;
   updatedAt: Date;
   publishedAt: Date | null;
+
+  submittedAt: Date | null;
+  reviewedBy: Types.ObjectId | null;
+  reviewedAt: Date | null;
+  moderationReason: string | null;
+  moderationHistory: ProductModerationEvent[];
 }
 
 /**

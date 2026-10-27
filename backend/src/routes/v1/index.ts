@@ -10,6 +10,7 @@ import { createSellerStoreRouter } from '../../modules/sellers/store/routes/sell
 import { createPublicStoresRouter } from '../../modules/stores/routes/public-store.routes.js';
 import { createAdminStoreRouter } from '../../modules/admin/stores/routes/admin-store.routes.js';
 import { createSellerProductsRouter } from '../../modules/sellers/products/management/routes/seller-products.routes.js';
+import { createAdminProductModerationRouter } from '../../modules/admin/products/moderation/routes/admin-product-moderation.routes.js';
 
 export function createV1Router() {
   const v1Router = Router();
@@ -33,6 +34,8 @@ export function createV1Router() {
   v1Router.use('/admin/brands', createBrandManagementRouter());
 
   v1Router.use('/admin/stores', createAdminStoreRouter());
+
+  v1Router.use('/admin/products', createAdminProductModerationRouter());
 
   return v1Router;
 }

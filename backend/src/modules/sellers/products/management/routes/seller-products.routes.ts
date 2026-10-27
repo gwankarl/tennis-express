@@ -11,6 +11,7 @@ import {
   getSellerProduct,
   listSellerProducts,
   restoreSellerProduct,
+  submitSellerProduct,
   updateSellerProduct,
 } from '../controllers/product.controller.js';
 import {
@@ -33,6 +34,12 @@ export function createSellerProductsRouter(): Router {
   router.use(createProductImageRouter());
 
   router.get('/', validateQuery(listSellerProductsQuerySchema), listSellerProducts);
+
+  router.post(
+    '/:productId/submit',
+    validateParams(sellerProductIdParamsSchema),
+    submitSellerProduct,
+  );
 
   router.get('/:productId', validateParams(sellerProductIdParamsSchema), getSellerProduct);
 
