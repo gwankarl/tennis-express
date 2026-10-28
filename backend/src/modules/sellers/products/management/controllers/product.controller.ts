@@ -7,6 +7,7 @@ import type {
   SellerProductIdParams,
 } from '../schemas/product.schema.js';
 import type { UpdateSellerProductRequest } from '../schemas/product.schema.js';
+import type { PaginationQuery } from '../../../../../shared/pagination.js';
 
 import { ProductDraftService } from '../services/product-draft.service.js';
 import { ProductListService } from '../services/product-list.service.js';
@@ -15,6 +16,9 @@ import { ProductUpdateService } from '../services/product-update.service.js';
 import { ProductArchiveService } from '../services/product-archive.service.js';
 import { ProductRestoreService } from '../services/product-restore.service.js';
 import { ProductSubmissionService } from '../services/product-submission.service.js';
+import { ProductCatalogService } from '../services/product-catalog.service.js';
+import { ProductDeleteService } from '../services/product-delete.service.js';
+import { ProductPublishService } from '../services/product-publish.service.js';
 
 const productDraftService = new ProductDraftService();
 const productListService = new ProductListService();
@@ -23,6 +27,9 @@ const productUpdateService = new ProductUpdateService();
 const productArchiveService = new ProductArchiveService();
 const productRestoreService = new ProductRestoreService();
 const productSubmissionService = new ProductSubmissionService();
+const productCatalogService = new ProductCatalogService();
+const productDeleteService = new ProductDeleteService();
+const productPublishService = new ProductPublishService();
 
 /** Creates a product draft for the authenticated seller. */
 export const createProductDraft: RequestHandler = async (req, res, next) => {
@@ -186,6 +193,98 @@ export const submitSellerProduct: RequestHandler = async (req, res, next) => {
     res.status(200).json({
       success: true,
       data: { product },
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+/** Lists active categories available for seller product details. */
+export const listSellerProductCategories: RequestHandler = async (req, res, next) => {
+  try {
+    if (!req.auth?.userId) {
+      throw new AppError({
+        statusCode: 401,
+        code: 'AUTHENTICATION_REQUIRED',
+        message: 'Authentication is required to access product categories.',
+      });
+    }
+
+    const query = res.locals.validatedQuery as PaginationQuery;
+    const result = await productCatalogService.listActiveCategories(query);
+
+    res.status(200).json({
+      success: true,
+      data: result,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+/** Lists active brands available for seller product details. */
+export const listSellerProductBrands: RequestHandler = async (req, res, next) => {
+  try {
+    if (!req.auth?.userId) {
+      throw new AppError({
+        statusCode: 401,
+        code: 'AUTHENTICATION_REQUIRED',
+        message: 'Authentication is required to access product brands.',
+      });
+    }
+
+    const query = res.locals.validatedQuery as PaginationQuery;
+    const result = await productCatalogService.listActiveBrands(query);
+
+    res.status(200).json({
+      success: true,
+      data: result,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+/** Publishes an approved product owned by the authenticated seller. */
+export const publishSellerProduct: RequestHandler = async (req, res, next) => {
+  try {
+    if (!req.auth?.userId) {
+      throw new AppError({
+        statusCode: 401,
+        code: 'AUTHENTICATION_REQUIRED',
+        message: 'Authentication is required to publish a product.',
+      });
+    }
+
+    const { productId } = req.params as unknown as SellerProductIdParams;
+    const product = await productPublishService.publishOwnProduct(req.auth.userId, productId);
+
+    res.status(200).json({
+      success: true,
+      data: { product },
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+/** Permanently deletes an unsubmitted draft owned by the authenticated seller. */
+export const deleteSellerProduct: RequestHandler = async (req, res, next) => {
+  try {
+    if (!req.auth?.userId) {
+      throw new AppError({
+        statusCode: 401,
+        code: 'AUTHENTICATION_REQUIRED',
+        message: 'Authentication is required to delete a product.',
+      });
+    }
+
+    const { productId } = req.params as unknown as SellerProductIdParams;
+    const result = await productDeleteService.deleteOwnDraft(req.auth.userId, productId);
+
+    res.status(200).json({
+      success: true,
+      data: result,
     });
   } catch (error) {
     next(error);

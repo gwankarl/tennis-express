@@ -5,6 +5,7 @@ import { StoreModel } from '../../../store/models/store.model.js';
 import { ProductModel } from '../../management/models/product.model.js';
 import type { ProductImage } from '../../management/types/product.types.js';
 import type { ReorderProductImagesRequest } from '../schemas/product-image.schema.js';
+import { assertProductEditable } from '../../management/helpers/assert-product-editable.js';
 
 /** Reorders images belonging to a product owned by the authenticated seller. */
 export class ProductImageReorderService {
@@ -26,7 +27,7 @@ export class ProductImageReorderService {
       _id: new mongoose.Types.ObjectId(productId),
       sellerId: sellerObjectId,
     })
-      .select('storeId images')
+      .select('storeId images moderationStatus publicationStatus')
       .exec();
 
     if (!product) {
@@ -36,6 +37,8 @@ export class ProductImageReorderService {
         message: 'The product could not be found.',
       });
     }
+
+    assertProductEditable(product);
 
     const authorizedStore = await StoreModel.exists({
       _id: product.storeId,

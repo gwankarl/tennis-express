@@ -4,6 +4,7 @@ import { ProductModel } from '../models/product.model.js';
 import type { Product } from '../types/product.types.js';
 import type { UpdateSellerProductRequest } from '../schemas/product.schema.js';
 import { ProductVariantModel } from '../../variants/models/product-variant.model.js';
+import { assertProductEditable } from '../helpers/assert-product-editable.js';
 
 /** Updates editable fields on a product owned by the seller. */
 export class ProductUpdateService {
@@ -38,6 +39,8 @@ export class ProductUpdateService {
         message: 'Product not found.',
       });
     }
+
+    assertProductEditable(product);
 
     if (changes.options !== undefined) {
       const hasVariants = await ProductVariantModel.exists({ productId: product._id });

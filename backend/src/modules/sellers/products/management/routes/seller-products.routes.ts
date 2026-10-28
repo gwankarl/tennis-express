@@ -5,11 +5,16 @@ import { createRequireRole } from '../../../../../middleware/auth/require-role.j
 import { validateBody } from '../../../../../middleware/validateBody.js';
 import { validateQuery } from '../../../../../middleware/validateQuery.js';
 import { validateParams } from '../../../../../middleware/validateParams.js';
+import { paginationQuerySchema } from '../../../../../shared/pagination.js';
 import {
   archiveSellerProduct,
   createProductDraft,
+  deleteSellerProduct,
   getSellerProduct,
+  listSellerProductBrands,
+  listSellerProductCategories,
   listSellerProducts,
+  publishSellerProduct,
   restoreSellerProduct,
   submitSellerProduct,
   updateSellerProduct,
@@ -41,6 +46,14 @@ export function createSellerProductsRouter(): Router {
     submitSellerProduct,
   );
 
+  router.get(
+    '/catalog/categories',
+    validateQuery(paginationQuerySchema),
+    listSellerProductCategories,
+  );
+
+  router.get('/catalog/brands', validateQuery(paginationQuerySchema), listSellerProductBrands);
+
   router.get('/:productId', validateParams(sellerProductIdParamsSchema), getSellerProduct);
 
   router.post('/', validateBody(createProductDraftSchema), createProductDraft);
@@ -51,6 +64,14 @@ export function createSellerProductsRouter(): Router {
     validateBody(updateSellerProductSchema),
     updateSellerProduct,
   );
+
+  router.post(
+    '/:productId/publish',
+    validateParams(sellerProductIdParamsSchema),
+    publishSellerProduct,
+  );
+
+  router.delete('/:productId', validateParams(sellerProductIdParamsSchema), deleteSellerProduct);
 
   router.post(
     '/:productId/archive',

@@ -9,9 +9,12 @@ import { createApp } from './app.js';
 import { connectDatabase, disconnectDatabase } from './config/database.js';
 import { env } from './config/env.js';
 import { logger } from './shared/logger.js';
+import { startPromotionLifecycleScheduler } from './modules/sellers/promotions/services/promotion-lifecycle.scheduler.js';
 
 async function startServer(): Promise<void> {
   await connectDatabase();
+
+  const stopPromotionLifecycleScheduler = startPromotionLifecycleScheduler();
 
   const app = createApp();
   const server = app.listen(env.port, () => {
@@ -27,6 +30,13 @@ async function startServer(): Promise<void> {
 
     shutdownStarted = true;
     logger.info({ signal }, 'Shutting down backend');
+
+    try {
+      await stopPromotionLifecycleScheduler();
+    } catch (error) {
+      logger.error({ err: error }, 'Failed to stop the promotion lifecycle scheduler');
+      process.exitCode = 1;
+    }
 
     try {
       await new Promise<void>((resolve, reject) => {

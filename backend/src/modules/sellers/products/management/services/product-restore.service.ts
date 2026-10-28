@@ -42,11 +42,21 @@ export class ProductRestoreService {
       });
     }
 
-    if (product.publicationStatus === 'archived') {
-      product.publicationStatus = 'draft';
-      product.publishedAt = null;
-      await product.save();
+    if (
+      product.publicationStatus !== 'archived' ||
+      product.moderationStatus !== 'approved' ||
+      product.publishedAt === null
+    ) {
+      throw new AppError({
+        statusCode: 409,
+        code: 'PRODUCT_NOT_RESTORABLE',
+        message: 'Only previously published, approved products can be restored.',
+      });
     }
+
+    product.publicationStatus = 'published';
+    // Preserve publishedAt from before the product was archived.
+    await product.save();
 
     return product.toObject() as Product;
   }

@@ -47,6 +47,7 @@ export const uploadAndRegisterProductImage: RequestHandler = async (req, res, ne
       sellerId: req.auth.userId,
       productId,
       buffer: req.file.buffer,
+      originalFileName: req.file.originalname,
       altText: input.altText,
     });
 

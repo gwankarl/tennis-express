@@ -42,10 +42,21 @@ export class ProductArchiveService {
       });
     }
 
-    if (product.publicationStatus !== 'archived') {
-      product.publicationStatus = 'archived';
-      await product.save();
+    if (product.publicationStatus === 'archived' && product.moderationStatus === 'approved') {
+      return product.toObject() as Product;
     }
+
+    if (product.publicationStatus !== 'published' || product.moderationStatus !== 'approved') {
+      throw new AppError({
+        statusCode: 409,
+        code: 'PRODUCT_NOT_ARCHIVABLE',
+        message: 'Only approved, published products can be archived.',
+      });
+    }
+
+    product.publicationStatus = 'archived';
+    // Keep publishedAt so restore can return it to its prior published state.
+    await product.save();
 
     return product.toObject() as Product;
   }

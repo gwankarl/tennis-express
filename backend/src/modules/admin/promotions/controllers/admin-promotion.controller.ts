@@ -1,6 +1,7 @@
 import type { RequestHandler } from 'express';
 
 import type {
+  AdminEligibleProductsQuery,
   AdminPromotionIdParams,
   AdminPromotionListQuery,
   CreateAdminMarketplaceCampaignRequest,
@@ -89,6 +90,21 @@ export const cancelAdminMarketplaceCampaign: RequestHandler = async (req, res, n
     res.status(200).json({
       success: true,
       data: { promotion },
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+/** Lists eligible products for a marketplace campaign selector. */
+export const listAdminEligibleProducts: RequestHandler = async (_req, res, next) => {
+  try {
+    const query = res.locals.validatedQuery as AdminEligibleProductsQuery;
+    const result = await adminPromotionService.listEligibleProducts(query);
+
+    res.status(200).json({
+      success: true,
+      data: result,
     });
   } catch (error) {
     next(error);

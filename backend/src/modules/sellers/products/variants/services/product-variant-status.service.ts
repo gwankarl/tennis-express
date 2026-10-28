@@ -9,6 +9,7 @@ import type {
   UpdateProductVariantStatusRequest,
 } from '../schemas/product-variant.schema.js';
 import type { ProductVariant } from '../types/product-variant.types.js';
+import { assertProductEditable } from '../../management/helpers/assert-product-editable.js';
 
 /** Changes the active status of a variant owned by the authenticated seller. */
 export class ProductVariantStatusService {
@@ -38,7 +39,7 @@ export class ProductVariantStatusService {
       _id: new mongoose.Types.ObjectId(params.productId),
       sellerId: sellerObjectId,
     })
-      .select('_id storeId')
+      .select('_id storeId moderationStatus publicationStatus')
       .exec();
 
     if (!product) {
@@ -48,6 +49,8 @@ export class ProductVariantStatusService {
         message: 'The product could not be found.',
       });
     }
+
+    assertProductEditable(product);
 
     const authorizedStore = await StoreModel.exists({
       _id: product.storeId,

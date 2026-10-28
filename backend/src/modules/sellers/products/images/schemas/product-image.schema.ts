@@ -8,7 +8,7 @@ import { sellerProductIdParamsSchema } from '../../management/schemas/product.sc
  */
 export const addProductImageSchema = z
   .object({
-    altText: z.string().trim().min(1).max(250),
+    altText: z.string().trim().min(1).max(250).optional(),
   })
   .strict();
 

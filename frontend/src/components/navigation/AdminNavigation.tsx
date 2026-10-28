@@ -29,6 +29,7 @@ const navigationItems: {
     end: true,
   },
   { label: 'Product Moderation', to: '/admin/products', Icon: FiPackage, end: true },
+  { label: 'Promotions', to: '/admin/promotions', Icon: FiTag, end: true },
   { label: 'Categories', to: '/admin/categories', Icon: FiGrid, end: true },
   { label: 'Brands', to: '/admin/brands', Icon: FiTag, end: true },
   { label: 'Orders', to: '/admin/orders', Icon: FiShoppingCart, end: true },

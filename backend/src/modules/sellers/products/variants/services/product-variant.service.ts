@@ -7,6 +7,7 @@ import { ProductVariantModel } from '../models/product-variant.model.js';
 import { buildVariantConfiguration } from '../helpers/variant-configuration.js';
 import type { CreateProductVariantRequest } from '../schemas/product-variant.schema.js';
 import type { ProductVariant } from '../types/product-variant.types.js';
+import { assertProductEditable } from '../../management/helpers/assert-product-editable.js';
 
 /** Creates variants for products owned by the authenticated seller. */
 export class ProductVariantService {
@@ -51,6 +52,8 @@ export class ProductVariantService {
         message: 'The product could not be found.',
       });
     }
+
+    assertProductEditable(product);
 
     const authorizedStore = await StoreModel.exists({
       _id: product.storeId,

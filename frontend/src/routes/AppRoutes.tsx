@@ -1,16 +1,9 @@
 import { Route, Routes } from 'react-router'
-import {
-  FiArchive,
-  FiHome,
-  FiMessageSquare,
-  FiPackage,
-  FiSettings,
-  FiShoppingBag,
-  FiShoppingCart,
-} from 'react-icons/fi'
+
 import PublicLayout from '../components/layout/PublicLayout'
 import WorkspaceLayout from '../components/layout/WorkspaceLayout'
 import AdminWorkspaceLayout from '../components/layout/AdminWorkspaceLayout'
+import SellerWorkspaceLayout from '../components/layout/SellerWorkspaceLayout'
 import EmailVerificationPage from '../pages/EmailVerificationPage'
 import ForgotPasswordPage from '../pages/ForgotPasswordPage'
 import HomePage from '../pages/HomePage'
@@ -27,10 +20,21 @@ import AdminCategoriesPage from '../pages/admin/AdminCategoriesPage'
 import AdminBrandsPage from '../pages/admin/AdminBrandsPage'
 import ProtectedRoute from './ProtectedRoute'
 import PublicStorePage from '../pages/stores/PublicStorePage'
-import SellerStorePage from '../pages/sellers/SellerStorePage'
 import AdminSellersPage from '../pages/admin/AdminSellersPage'
 import AdminStoresPage from '../pages/admin/AdminStoresPage'
 import AdminStoreDetailsPage from '../pages/admin/AdminStoreDetailsPage'
+import SellerStorePage from '../pages/sellers/SellerStorePage'
+import SellerProductsPage from '../pages/sellers/SellerProductsPage'
+import SellerProductEditorPage from '../pages/sellers/SellerProductEditorPage'
+import AdminProductModerationPage from '../pages/admin/AdminProductModerationPage'
+import AdminProductReviewPage from '../pages/admin/AdminProductReviewPage'
+import SellerPromotionsPage from '../pages/sellers/SellerPromotionsPage'
+import SellerPromotionDetailsPage from '../pages/sellers/SellerPromotionDetailsPage'
+import SellerPromotionFormPage from '../pages/sellers/SellerPromotionFormPage'
+import SellerDashboardPage from '../pages/sellers/SellerDashboardPage'
+import AdminPromotionsPage from '../pages/admin/AdminPromotionsPage'
+import AdminPromotionDetailsPage from '../pages/admin/AdminPromotionDetailsPage'
+import AdminPromotionFormPage from '../pages/admin/AdminPromotionFormPage'
 
 /** Organizes public and authenticated routes with a global not-found fallback. */
 export default function AppRoutes() {
@@ -75,25 +79,15 @@ export default function AppRoutes() {
       </Route>
 
       <Route element={<ProtectedRoute requiredRole="seller" />}>
-        <Route
-          path="seller"
-          element={
-            <WorkspaceLayout
-              role="seller"
-              navigationItems={[
-                { label: 'Overview', to: '/seller', Icon: FiHome, end: true },
-                { label: 'Products', to: '/seller/products', Icon: FiPackage, end: true },
-                { label: 'Inventory', to: '/seller/inventory', Icon: FiArchive, end: true },
-                { label: 'Orders', to: '/seller/orders', Icon: FiShoppingCart, end: true },
-                { label: 'Storefront', to: '/seller/store', Icon: FiShoppingBag, end: true },
-                { label: 'Messages', to: '/seller/messages', Icon: FiMessageSquare, end: true },
-                { label: 'Settings', to: '/seller/settings', Icon: FiSettings, end: true },
-              ]}
-            />
-          }
-        >
-          <Route index element={<UserSectionPage title="Seller overview" />} />
-          <Route path="products" element={<UserSectionPage title="Products" />} />
+        <Route path="seller" element={<SellerWorkspaceLayout />}>
+          <Route index element={<SellerDashboardPage />} />
+          <Route path="products" element={<SellerProductsPage />} />
+          <Route path="products/new" element={<SellerProductEditorPage />} />
+          <Route path="products/:productId" element={<SellerProductEditorPage />} />
+          <Route path="promotions" element={<SellerPromotionsPage />} />
+          <Route path="promotions/new" element={<SellerPromotionFormPage />} />
+          <Route path="promotions/:promotionId/edit" element={<SellerPromotionFormPage />} />
+          <Route path="promotions/:promotionId" element={<SellerPromotionDetailsPage />} />
           <Route path="inventory" element={<UserSectionPage title="Inventory" />} />
           <Route path="orders" element={<UserSectionPage title="Orders" />} />
           <Route path="store" element={<SellerStorePage />} />
@@ -110,9 +104,14 @@ export default function AppRoutes() {
           <Route path="stores" element={<AdminStoresPage />} />
           <Route path="stores/:storeId" element={<AdminStoreDetailsPage />} />
           <Route path="seller-applications" element={<AdminSellerApplicationsPage />} />
-          <Route path="products" element={<UserSectionPage title="Product moderation" />} />
+          <Route path="products" element={<AdminProductModerationPage />} />
+          <Route path="products/:productId" element={<AdminProductReviewPage />} />
           <Route path="categories" element={<AdminCategoriesPage />} />
           <Route path="brands" element={<AdminBrandsPage />} />
+          <Route path="promotions" element={<AdminPromotionsPage />} />
+          <Route path="promotions/new" element={<AdminPromotionFormPage />} />
+          <Route path="promotions/:promotionId/edit" element={<AdminPromotionFormPage />} />
+          <Route path="promotions/:promotionId" element={<AdminPromotionDetailsPage />} />
           <Route path="orders" element={<UserSectionPage title="Orders" />} />
           <Route path="disputes" element={<UserSectionPage title="Disputes" />} />
           <Route path="settings" element={<UserSectionPage title="Platform settings" />} />

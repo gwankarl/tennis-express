@@ -11,10 +11,12 @@ import {
   cancelAdminMarketplaceCampaign,
   createAdminMarketplaceCampaign,
   getAdminPromotion,
+  listAdminEligibleProducts,
   listAdminPromotions,
   updateAdminMarketplaceCampaign,
 } from '../controllers/admin-promotion.controller.js';
 import {
+  adminEligibleProductsQuerySchema,
   adminPromotionIdParamsSchema,
   adminPromotionListQuerySchema,
   createAdminMarketplaceCampaignSchema,
@@ -28,6 +30,12 @@ export function createAdminPromotionsRouter(): Router {
   router.use(createRequireAuthentication(), createRequireRole(['admin']));
 
   router.get('/', validateQuery(adminPromotionListQuerySchema), listAdminPromotions);
+
+  router.get(
+    '/eligible-products',
+    validateQuery(adminEligibleProductsQuerySchema),
+    listAdminEligibleProducts,
+  );
 
   router.get('/:promotionId', validateParams(adminPromotionIdParamsSchema), getAdminPromotion);
 

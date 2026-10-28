@@ -5,6 +5,7 @@ import { StoreModel } from '../../../store/models/store.model.js';
 import { ProductModel } from '../../management/models/product.model.js';
 import type { ProductImage } from '../../management/types/product.types.js';
 import type { UpdateProductImageRequest } from '../schemas/product-image.schema.js';
+import { assertProductEditable } from '../../management/helpers/assert-product-editable.js';
 
 /** Updates metadata for an image belonging to the authenticated seller's product. */
 export class ProductImageUpdateService {
@@ -31,7 +32,7 @@ export class ProductImageUpdateService {
       _id: new mongoose.Types.ObjectId(productId),
       sellerId: sellerObjectId,
     })
-      .select('storeId images')
+      .select('storeId images moderationStatus publicationStatus')
       .exec();
 
     if (!product) {
@@ -41,6 +42,8 @@ export class ProductImageUpdateService {
         message: 'The product could not be found.',
       });
     }
+
+    assertProductEditable(product);
 
     const authorizedStore = await StoreModel.exists({
       _id: product.storeId,
