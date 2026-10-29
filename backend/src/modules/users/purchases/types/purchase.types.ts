@@ -23,3 +23,15 @@ export interface Purchase extends PurchaseTotals {
   createdAt: Date;
   updatedAt: Date;
 }
+
+export interface PurchaseListPagination {
+  page: number;
+  limit: number;
+  totalItems: number;
+  totalPages: number;
+}
+
+export interface PurchaseListResult {
+  purchases: Purchase[];
+  pagination: PurchaseListPagination;
+}

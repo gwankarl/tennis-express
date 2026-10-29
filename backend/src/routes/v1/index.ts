@@ -18,6 +18,8 @@ import { createWishlistRouter } from '../../modules/users/wishlist/routes/wishli
 import { createCartRouter } from '../../modules/users/cart/routes/cart.routes.js';
 import { createCheckoutSessionRouter } from '../../modules/users/checkout/routes/checkout-session.routes.js';
 import { createAddressRouter } from '../../modules/users/addresses/routes/address.routes.js';
+import { createPurchaseRouter } from '../../modules/users/purchases/routes/purchase.routes.js';
+import { createOrderRouter } from '../../modules/users/orders/routes/order.routes.js';
 
 export function createV1Router() {
   const v1Router = Router();
@@ -36,7 +38,11 @@ export function createV1Router() {
 
   v1Router.use('/checkout-sessions', createCheckoutSessionRouter());
 
+  v1Router.use('/purchases', createPurchaseRouter());
+
   v1Router.use('/addresses', createAddressRouter());
+
+  v1Router.use('/orders', createOrderRouter());
 
   v1Router.use('/seller-applications', createSellerApplicationsRouter());
 
