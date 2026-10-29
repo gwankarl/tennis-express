@@ -39,18 +39,17 @@ interface PublicProductListAggregationResult {
 export class PublicProductService {
   async list(query: ListPublicProductsQuery): Promise<PublicProductListResult> {
     const productFilters = await buildPublicProductQueryMatch(query);
-    const pipeline = buildPublicProductListPipeline(query, productFilters);
+    return this.listWithFilters(query, productFilters);
+  }
 
-    const [result] =
-      await ProductModel.aggregate<PublicProductListAggregationResult>(pipeline).exec();
+  async listForStore(
+    storeId: string,
+    query: ListPublicProductsQuery,
+  ): Promise<PublicProductListResult> {
+    const productFilters = await buildPublicProductQueryMatch(query);
+    productFilters.storeId = new mongoose.Types.ObjectId(storeId);
 
-    const products: PublicProductCard[] = mapPublicProductCards(result?.products ?? []);
-    const totalItems = result?.count[0]?.totalItems ?? 0;
-
-    return {
-      products,
-      pagination: buildPaginationMetadata(query, totalItems),
-    };
+    return this.listWithFilters(query, productFilters);
   }
 
   async getById(productId: string): Promise<PublicProductDetail> {
@@ -102,6 +101,24 @@ export class PublicProductService {
           required: attribute.required,
           options: attribute.type === 'select' ? attribute.options : [],
         })),
+    };
+  }
+
+  private async listWithFilters(
+    query: ListPublicProductsQuery,
+    productFilters: Record<string, unknown>,
+  ): Promise<PublicProductListResult> {
+    const pipeline = buildPublicProductListPipeline(query, productFilters);
+
+    const [result] =
+      await ProductModel.aggregate<PublicProductListAggregationResult>(pipeline).exec();
+
+    const products: PublicProductCard[] = mapPublicProductCards(result?.products ?? []);
+    const totalItems = result?.count[0]?.totalItems ?? 0;
+
+    return {
+      products,
+      pagination: buildPaginationMetadata(query, totalItems),
     };
   }
 }

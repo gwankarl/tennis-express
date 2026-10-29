@@ -2,34 +2,47 @@ import {
   buildPaginationMetadata,
   getPaginationOffset,
   type PaginationMetadata,
-  type PaginationQuery,
 } from '../../../shared/pagination.js';
-import { StoreModel } from '../../sellers/store/models/store.model.js';
-
 import { AppError } from '../../../shared/errors/AppError.js';
+import { StoreModel } from '../../sellers/store/models/store.model.js';
 import type { Store } from '../../sellers/store/types/store.types.js';
+import {
+  buildPublicStoreListFilter,
+  buildPublicStoreListSort,
+} from '../helpers/public-store-query.helper.js';
+import { mapPublicStore } from '../helpers/public-store.mapper.js';
+import type { ListPublicStoresQuery } from '../schemas/public-store.schema.js';
 import type { PublicStore } from '../types/public-store.types.js';
+import { PublicProductService } from '../../products/services/public-product.service.js';
+import { ListPublicProductsQuery } from '../../products/schemas/public-product.schema.js';
+import { PublicProductListResult } from '../../products/types/public-product.types.js';
+
+const publicProductService = new PublicProductService();
+
+const PUBLIC_STORE_SELECT =
+  'name slug description location.region location.city logo.secureUrl fulfilmentProfile deliveryOptions collectionOptions returnPolicy ratingSummary';
 
 /** Reads active storefronts for the public store directory. */
 export class PublicStoreService {
-  async list(input: PaginationQuery): Promise<{
+  async list(input: ListPublicStoresQuery): Promise<{
     stores: PublicStore[];
     pagination: PaginationMetadata;
   }> {
+    const filter = buildPublicStoreListFilter(input);
+    const sort = buildPublicStoreListSort(input.sort);
+
     const [storeDocuments, totalItems] = await Promise.all([
-      StoreModel.find({ status: 'active' })
-        .select(
-          'name slug description location.region location.city logo.secureUrl fulfilmentProfile deliveryOptions collectionOptions returnPolicy ratingSummary',
-        )
-        .sort({ name: 1, _id: 1 })
+      StoreModel.find(filter)
+        .select(PUBLIC_STORE_SELECT)
+        .sort(sort)
         .skip(getPaginationOffset(input))
         .limit(input.limit)
         .lean()
         .exec(),
-      StoreModel.countDocuments({ status: 'active' }).exec(),
+      StoreModel.countDocuments(filter).exec(),
     ]);
 
-    const stores: PublicStore[] = storeDocuments.map((store) => this.toPublicStore(store as Store));
+    const stores: PublicStore[] = storeDocuments.map((store) => mapPublicStore(store as Store));
 
     return {
       stores,
@@ -42,9 +55,7 @@ export class PublicStoreService {
       slug,
       status: 'active',
     })
-      .select(
-        'name slug description location.region location.city logo.secureUrl fulfilmentProfile deliveryOptions collectionOptions returnPolicy ratingSummary',
-      )
+      .select(PUBLIC_STORE_SELECT)
       .exec();
 
     if (!store) {
@@ -55,25 +66,29 @@ export class PublicStoreService {
       });
     }
 
-    return this.toPublicStore(store.toObject() as Store);
+    return mapPublicStore(store.toObject() as Store);
   }
 
-  private toPublicStore(store: Store): PublicStore {
-    return {
-      id: store._id.toString(),
-      name: store.name,
-      slug: store.slug,
-      description: store.description,
-      location: {
-        region: store.location.region,
-        city: store.location.city,
-      },
-      logo: store.logo ? { secureUrl: store.logo.secureUrl } : null,
-      fulfilmentProfile: store.fulfilmentProfile,
-      deliveryOptions: store.deliveryOptions,
-      collectionOptions: store.collectionOptions,
-      returnPolicy: store.returnPolicy,
-      ratingSummary: store.ratingSummary,
-    };
+  async listProductsByStoreSlug(
+    slug: string,
+    query: ListPublicProductsQuery,
+  ): Promise<PublicProductListResult> {
+    const store = await StoreModel.findOne({
+      slug,
+      status: 'active',
+    })
+      .select('_id')
+      .lean()
+      .exec();
+
+    if (!store) {
+      throw new AppError({
+        statusCode: 404,
+        code: 'STORE_NOT_FOUND',
+        message: 'The requested storefront could not be found.',
+      });
+    }
+
+    return publicProductService.listForStore(store._id.toString(), query);
   }
 }
