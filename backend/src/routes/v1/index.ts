@@ -13,6 +13,7 @@ import { createSellerProductsRouter } from '../../modules/sellers/products/manag
 import { createAdminProductModerationRouter } from '../../modules/admin/products/moderation/routes/admin-product-moderation.routes.js';
 import { createSellerPromotionsRouter } from '../../modules/sellers/promotions/routes/seller-promotion.routes.js';
 import { createAdminPromotionsRouter } from '../../modules/admin/promotions/routes/admin-promotion.routes.js';
+import { createPublicProductsRouter } from '../../modules/products/routes/public-product.routes.js';
 
 export function createV1Router() {
   const v1Router = Router();
@@ -20,6 +21,8 @@ export function createV1Router() {
   v1Router.use('/auth', createAuthRouter());
 
   v1Router.use('/stores', createPublicStoresRouter());
+
+  v1Router.use('/products', createPublicProductsRouter());
 
   v1Router.use('/user', createUserAccountsRouter());
 
