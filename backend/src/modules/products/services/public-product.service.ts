@@ -8,6 +8,8 @@ import { ProductModel } from '../../sellers/products/management/models/product.m
 import { getPublicProductFilterOptions } from '../helpers/public-product-filter-options.helper.js';
 import { mapPublicProductCards } from '../helpers/public-product-card.mapper.js';
 import { buildPublicProductListPipeline } from '../helpers/public-product-list.pipeline.js';
+import { buildPublicProductNewArrivalsPipeline } from '../helpers/public-product-new-arrivals.pipeline.js';
+import { buildPublicProductRelatedPipeline } from '../helpers/public-product-related.pipeline.js';
 import { buildPublicProductQueryMatch } from '../helpers/public-product-query.helper.js';
 import {
   PUBLIC_PRODUCT_AVAILABILITY_OPTIONS,
@@ -20,6 +22,8 @@ import {
 import type {
   ListPublicProductsQuery,
   PublicProductFiltersQuery,
+  PublicProductNewArrivalsQuery,
+  PublicProductRelatedQuery,
 } from '../schemas/public-product.schema.js';
 import { CategoryAttribute } from '../../admin/categories/types/category.types.js';
 import {
@@ -40,6 +44,26 @@ export class PublicProductService {
   async list(query: ListPublicProductsQuery): Promise<PublicProductListResult> {
     const productFilters = await buildPublicProductQueryMatch(query);
     return this.listWithFilters(query, productFilters);
+  }
+
+  /** Returns the newest publicly visible products. */
+  async getNewArrivals(query: PublicProductNewArrivalsQuery): Promise<PublicProductCard[]> {
+    const pipeline = buildPublicProductNewArrivalsPipeline(query);
+    const products = await ProductModel.aggregate<ProductAggregateRow>(pipeline).exec();
+
+    return mapPublicProductCards(products);
+  }
+
+  /** Returns publicly visible products related to the requested product. */
+  async getRelated(
+    productId: string,
+    query: PublicProductRelatedQuery,
+  ): Promise<PublicProductCard[]> {
+    const sourceProduct = await this.getById(productId);
+    const pipeline = buildPublicProductRelatedPipeline(sourceProduct, query);
+    const products = await ProductModel.aggregate<ProductAggregateRow>(pipeline).exec();
+
+    return mapPublicProductCards(products);
   }
 
   async listForStore(

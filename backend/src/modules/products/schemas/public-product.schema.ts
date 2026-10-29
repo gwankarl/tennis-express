@@ -22,6 +22,20 @@ export const publicProductFiltersQuerySchema = z.object({
 
 export type PublicProductFiltersQuery = z.output<typeof publicProductFiltersQuerySchema>;
 
+export const publicProductNewArrivalsQuerySchema = z.object({
+  limit: z.coerce.number().int().min(1).max(100).default(12),
+});
+
+export type PublicProductNewArrivalsQuery = z.output<
+  typeof publicProductNewArrivalsQuerySchema
+>;
+
+export const publicProductRelatedQuerySchema = z.object({
+  limit: z.coerce.number().int().min(1).max(100).default(8),
+});
+
+export type PublicProductRelatedQuery = z.output<typeof publicProductRelatedQuerySchema>;
+
 const baseQuerySchema = paginationQuerySchema.extend({
   q: z.string().trim().min(1).max(150).optional(),
   categoryId: objectIdSchema.optional(),

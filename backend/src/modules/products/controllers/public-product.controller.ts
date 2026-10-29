@@ -3,6 +3,8 @@ import type { RequestHandler } from 'express';
 import type {
   ListPublicProductsQuery,
   PublicProductFiltersQuery,
+  PublicProductNewArrivalsQuery,
+  PublicProductRelatedQuery,
 } from '../schemas/public-product.schema.js';
 import { PublicProductService } from '../services/public-product.service.js';
 
@@ -46,6 +48,39 @@ export const getPublicProductById: RequestHandler = async (req, res, next) => {
     res.status(200).json({
       success: true,
       data: { product },
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+/** Lists the newest publicly visible products. */
+export const listPublicNewArrivals: RequestHandler = async (req, res, next) => {
+  try {
+    const query = res.locals.validatedQuery as PublicProductNewArrivalsQuery;
+    const products = await publicProductService.getNewArrivals(query);
+
+    res.status(200).json({
+      success: true,
+      data: { products },
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+/** Lists publicly visible products related to the requested product. */
+export const getRelatedPublicProducts: RequestHandler = async (req, res, next) => {
+  try {
+    const query = res.locals.validatedQuery as PublicProductRelatedQuery;
+    const products = await publicProductService.getRelated(
+      req.params.productId as string,
+      query,
+    );
+
+    res.status(200).json({
+      success: true,
+      data: { products },
     });
   } catch (error) {
     next(error);
