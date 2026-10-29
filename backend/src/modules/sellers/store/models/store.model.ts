@@ -70,6 +70,10 @@ const storeDeliveryOptionSchema = new Schema<StoreDeliveryOption>(
       type: Number,
       required: true,
       min: 0,
+      validate: {
+        validator: Number.isSafeInteger,
+        message: 'Fee must be a nonnegative safe integer in XAF.',
+      },
     },
   },
   { _id: false },
@@ -91,6 +95,10 @@ const storeCollectionOptionSchema = new Schema<StoreCollectionOption>(
       type: Number,
       required: true,
       min: 0,
+      validate: {
+        validator: Number.isSafeInteger,
+        message: 'Fee must be a nonnegative safe integer in XAF.',
+      },
     },
   },
   { _id: false },

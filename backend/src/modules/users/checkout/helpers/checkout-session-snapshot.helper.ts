@@ -173,6 +173,7 @@ export async function buildCheckoutSessionSnapshot(
     } else {
       groupsBySeller.set(sellerId, {
         sellerId: line.sellerId,
+        fulfillment: null,
         cartItemIds: [line.cartItemId],
       });
     }

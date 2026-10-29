@@ -21,7 +21,11 @@ const storeOptionSchema = z
   .object({
     name: z.string().trim().min(1),
     description: z.string().trim().min(1),
-    fee: z.number().finite().min(0),
+    fee: z
+      .number()
+      .int()
+      .min(0)
+      .refine(Number.isSafeInteger, 'Fee must be a nonnegative safe integer in XAF.'),
   })
   .strict();
 

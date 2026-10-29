@@ -2,6 +2,7 @@ import mongoose, { Schema } from 'mongoose';
 
 import {
   CHECKOUT_SESSION_STATUSES,
+  CheckoutFulfillmentSelection,
   type CheckoutLineSnapshot,
   type CheckoutPromotionSnapshot,
   type CheckoutQuote,
@@ -9,6 +10,12 @@ import {
   type CheckoutSession,
 } from '../types/checkout-session.types.js';
 import { PROMOTION_TYPES } from '../../../sellers/promotions/types/promotion.types.js';
+import {
+  CAMEROON_REGIONS,
+  SELLER_FULFILMENT_METHODS,
+} from '../../seller-applications/types/seller-application.types.js';
+import type { AddressDetails } from '../../addresses/types/address.types.js';
+import type { StoreLocation } from '../../../sellers/store/types/store.types.js';
 
 const checkoutPromotionSnapshotSchema = new Schema<CheckoutPromotionSnapshot>(
   {
@@ -85,9 +92,62 @@ const checkoutLineSnapshotSchema = new Schema<CheckoutLineSnapshot>(
   { _id: false },
 );
 
+const checkoutAddressSnapshotSchema = new Schema<AddressDetails>(
+  {
+    recipientName: { type: String, required: true, trim: true },
+    phone: { type: String, required: true, trim: true },
+    region: { type: String, enum: CAMEROON_REGIONS, required: true },
+    city: { type: String, required: true, trim: true },
+    neighborhood: { type: String, required: true, trim: true },
+    street: { type: String, required: true, trim: true },
+    deliveryInstructions: { type: String, default: null },
+  },
+  { _id: false },
+);
+
+const checkoutCollectionLocationSchema = new Schema<StoreLocation>(
+  {
+    region: { type: String, enum: CAMEROON_REGIONS, required: true },
+    city: { type: String, required: true, trim: true },
+    address: { type: String, required: true, trim: true },
+  },
+  { _id: false },
+);
+
+const checkoutFulfillmentSelectionSchema = new Schema<CheckoutFulfillmentSelection>(
+  {
+    method: {
+      type: String,
+      enum: SELLER_FULFILMENT_METHODS,
+      required: true,
+    },
+    optionName: { type: String, required: true, trim: true },
+    optionDescription: { type: String, required: true, trim: true },
+    fee: { type: Number, required: true, min: 0, validate: Number.isSafeInteger },
+    savedAddressId: {
+      type: Schema.Types.ObjectId,
+      ref: 'CustomerAddress',
+      default: null,
+    },
+    deliveryAddressSnapshot: {
+      type: checkoutAddressSnapshotSchema,
+      default: null,
+    },
+    collectionLocation: {
+      type: checkoutCollectionLocationSchema,
+      default: null,
+    },
+  },
+  { _id: false },
+);
+
 const checkoutSellerGroupSchema = new Schema<CheckoutSellerGroup>(
   {
     sellerId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+    fulfillment: {
+      type: checkoutFulfillmentSelectionSchema,
+      default: null,
+    },
     cartItemIds: {
       type: [Schema.Types.ObjectId],
       required: true,

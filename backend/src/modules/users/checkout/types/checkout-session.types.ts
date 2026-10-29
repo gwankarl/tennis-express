@@ -1,5 +1,11 @@
 import type { Types } from 'mongoose';
 import type { PromotionType } from '../../../sellers/promotions/types/promotion.types.js';
+import type {
+  CameroonRegion,
+  SellerFulfilmentMethod,
+} from '../../seller-applications/types/seller-application.types.js';
+import type { AddressDetails } from '../../addresses/types/address.types.js';
+import type { StoreLocation } from '../../../sellers/store/types/store.types.js';
 
 export const CHECKOUT_SESSION_STATUSES = ['active', 'expired', 'cancelled', 'confirmed'] as const;
 
@@ -33,6 +39,7 @@ export interface CheckoutLineSnapshot {
 /** A seller's selected lines; fulfillment is chosen in a later checkout step. */
 export interface CheckoutSellerGroup {
   sellerId: Types.ObjectId;
+  fulfillment: CheckoutFulfillmentSelection | null;
   cartItemIds: Types.ObjectId[];
 }
 
@@ -60,4 +67,65 @@ export interface CheckoutSession {
   confirmedPurchaseId: Types.ObjectId | null;
   createdAt: Date;
   updatedAt: Date;
+}
+
+/** One delivery or collection option currently offered by a seller. */
+export interface CheckoutFulfillmentOption {
+  method: SellerFulfilmentMethod;
+  name: string;
+  description: string;
+  fee: number;
+}
+
+/** Fulfillment choices available for one seller's group in the session. */
+export interface CheckoutSellerFulfillmentOptions {
+  sellerId: string;
+  storeId: string;
+  storeName: string | null;
+  options: CheckoutFulfillmentOption[];
+}
+
+/** Fulfillment choices for every seller group in a checkout session. */
+export interface CheckoutFulfillmentOptionsResult {
+  sessionId: string;
+  destinationRegion: CameroonRegion;
+  sellerGroups: CheckoutSellerFulfillmentOptions[];
+}
+
+/** Fulfillment choice and immutable location details captured for a seller group. */
+export interface CheckoutFulfillmentSelection {
+  method: SellerFulfilmentMethod;
+  optionName: string;
+  optionDescription: string;
+  fee: number;
+  savedAddressId: Types.ObjectId | null;
+  deliveryAddressSnapshot: AddressDetails | null;
+  collectionLocation: StoreLocation | null;
+}
+
+/** A price, promotion, or fulfillment-fee change found during revalidation. */
+export type CheckoutMaterialChange =
+  | {
+      kind: 'unit_price';
+      cartItemId: string;
+      previousValue: number;
+      currentValue: number;
+    }
+  | {
+      kind: 'promotion';
+      cartItemId: string;
+      previousValue: CheckoutPromotionSnapshot | null;
+      currentValue: CheckoutPromotionSnapshot | null;
+    }
+  | {
+      kind: 'fulfillment_fee';
+      sellerId: string;
+      previousValue: number;
+      currentValue: number;
+    };
+
+/** Updated checkout quote and changes the customer may need to review. */
+export interface CheckoutRevalidationResult {
+  checkoutSession: CheckoutSession;
+  changes: CheckoutMaterialChange[];
 }
