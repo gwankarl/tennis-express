@@ -2,6 +2,10 @@ import { useEffect, useRef, useState } from 'react'
 import { Link, useLocation } from 'react-router'
 import { useAuth } from '../../features/auth/hooks/useAuth'
 import LogoutButton from '../layout/LogoutButton'
+import ProductSearchForm from './ProductSearchForm'
+import PublicPrimaryNavigation from './PublicPrimaryNavigation'
+import { usePublicCategories } from '../../features/categories/hooks/usePublicCategories'
+import HeaderShoppingActions from './HeaderShoppingActions'
 
 const dashboardDestinations = [
   { role: 'customer', label: 'User Dashboard', to: '/customer' },
@@ -113,45 +117,52 @@ function AccountDropdown({ userName, roles }: AccountDropdownProps) {
   )
 }
 
-/** Renders the public header and the signed-in user's role-based account menu. */
+/** Renders the shared public header and role-aware account menu. */
 export default function Header() {
   const { user } = useAuth()
   const location = useLocation()
+  const categoriesQuery = usePublicCategories()
+  const categories = categoriesQuery.data ?? []
 
   return (
     <header className="relative z-20 border-b border-border bg-surface">
-      <div className="mx-auto flex w-full max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
-        <Link to="/" className="text-xl font-bold text-primary">
-          Tennis-Xpress
-        </Link>
-
-        <nav aria-label="Main navigation" className="flex items-center gap-4">
-          <Link
-            to="/"
-            className="text-supporting font-medium text-text-secondary hover:text-primary"
-          >
-            Home
+      <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="flex flex-wrap items-center gap-3 py-3 sm:gap-5 sm:py-4">
+          <Link to="/" className="shrink-0 text-xl font-bold text-primary">
+            Tennis-Xpress
           </Link>
 
-          {user ? (
-            <AccountDropdown key={location.key} userName={user.userName} roles={user.roles} />
-          ) : (
-            <>
-              <Link
-                to="/login"
-                className="text-supporting font-medium text-text-secondary hover:text-primary"
-              >
-                Login
-              </Link>
-              <Link
-                to="/register"
-                className="text-supporting font-medium text-text-secondary hover:text-primary"
-              >
-                Create account
-              </Link>
-            </>
-          )}
-        </nav>
+          <div className="order-3 w-full sm:order-2 sm:flex-1">
+            <ProductSearchForm key={`${location.pathname}${location.search}`} />
+          </div>
+
+          <div className="order-2 ml-auto flex shrink-0 items-center gap-4 sm:order-3 sm:ml-0">
+            <HeaderShoppingActions user={user} />
+
+            {user ? (
+              <AccountDropdown key={location.key} userName={user.userName} roles={user.roles} />
+            ) : (
+              <div className="flex items-center gap-3">
+                <Link
+                  to="/login"
+                  className="text-supporting font-medium text-text-secondary hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                >
+                  Login
+                </Link>
+                <Link
+                  to="/register"
+                  className="rounded-md bg-primary px-3 py-2 text-supporting font-medium text-surface hover:brightness-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+                >
+                  Create account
+                </Link>
+              </div>
+            )}
+          </div>
+        </div>
+
+        <div className="border-t border-border">
+          <PublicPrimaryNavigation categories={categories} />
+        </div>
       </div>
     </header>
   )

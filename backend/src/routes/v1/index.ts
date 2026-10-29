@@ -20,6 +20,7 @@ import { createCheckoutSessionRouter } from '../../modules/users/checkout/routes
 import { createAddressRouter } from '../../modules/users/addresses/routes/address.routes.js';
 import { createPurchaseRouter } from '../../modules/users/purchases/routes/purchase.routes.js';
 import { createOrderRouter } from '../../modules/users/orders/routes/order.routes.js';
+import { createPublicCategoriesRouter } from '../../modules/categories/routes/public-category.routes.js';
 
 export function createV1Router() {
   const v1Router = Router();
@@ -29,6 +30,8 @@ export function createV1Router() {
   v1Router.use('/stores', createPublicStoresRouter());
 
   v1Router.use('/products', createPublicProductsRouter());
+
+  v1Router.use('/categories', createPublicCategoriesRouter());
 
   v1Router.use('/user', createUserAccountsRouter());
 

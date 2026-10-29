@@ -35,6 +35,7 @@ import SellerDashboardPage from '../pages/sellers/SellerDashboardPage'
 import AdminPromotionsPage from '../pages/admin/AdminPromotionsPage'
 import AdminPromotionDetailsPage from '../pages/admin/AdminPromotionDetailsPage'
 import AdminPromotionFormPage from '../pages/admin/AdminPromotionFormPage'
+import PublicProductSearchPage from '../pages/products/PublicProductSearchPage'
 
 /** Organizes public and authenticated routes with a global not-found fallback. */
 export default function AppRoutes() {
@@ -47,6 +48,7 @@ export default function AppRoutes() {
         <Route path="login" element={<LoginPage />} />
         <Route path="forgot-password" element={<ForgotPasswordPage />} />
         <Route path="reset-password" element={<ResetPasswordPage />} />
+        <Route path="products" element={<PublicProductSearchPage />} />
         <Route path="stores/:slug" element={<PublicStorePage />} />
       </Route>
 
