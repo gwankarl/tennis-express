@@ -14,6 +14,7 @@ import { createAdminProductModerationRouter } from '../../modules/admin/products
 import { createSellerPromotionsRouter } from '../../modules/sellers/promotions/routes/seller-promotion.routes.js';
 import { createAdminPromotionsRouter } from '../../modules/admin/promotions/routes/admin-promotion.routes.js';
 import { createPublicProductsRouter } from '../../modules/products/routes/public-product.routes.js';
+import { createWishlistRouter } from '../../modules/users/wishlist/routes/wishlist.routes.js';
 
 export function createV1Router() {
   const v1Router = Router();
@@ -23,6 +24,8 @@ export function createV1Router() {
   v1Router.use('/stores', createPublicStoresRouter());
 
   v1Router.use('/products', createPublicProductsRouter());
+
+  v1Router.use('/wishlist', createWishlistRouter());
 
   v1Router.use('/user', createUserAccountsRouter());
 

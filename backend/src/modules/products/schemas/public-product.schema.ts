@@ -26,9 +26,7 @@ export const publicProductNewArrivalsQuerySchema = z.object({
   limit: z.coerce.number().int().min(1).max(100).default(12),
 });
 
-export type PublicProductNewArrivalsQuery = z.output<
-  typeof publicProductNewArrivalsQuerySchema
->;
+export type PublicProductNewArrivalsQuery = z.output<typeof publicProductNewArrivalsQuerySchema>;
 
 export const publicProductRelatedQuerySchema = z.object({
   limit: z.coerce.number().int().min(1).max(100).default(8),
@@ -116,3 +114,9 @@ export const listPublicProductsQuerySchema = baseQuerySchema
   });
 
 export type ListPublicProductsQuery = z.output<typeof listPublicProductsQuerySchema>;
+
+export const publicProductPopularQuerySchema = z.object({
+  limit: z.coerce.number().int().min(1).max(100).default(12),
+});
+
+export type PublicProductPopularQuery = z.output<typeof publicProductPopularQuerySchema>;

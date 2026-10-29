@@ -23,6 +23,7 @@ import type {
   ListPublicProductsQuery,
   PublicProductFiltersQuery,
   PublicProductNewArrivalsQuery,
+  PublicProductPopularQuery,
   PublicProductRelatedQuery,
 } from '../schemas/public-product.schema.js';
 import { CategoryAttribute } from '../../admin/categories/types/category.types.js';
@@ -31,6 +32,7 @@ import {
   type PublicProductDetailAggregateRow,
 } from '../helpers/public-product-detail.mapper.js';
 import { buildPublicProductDetailPipeline } from '../helpers/public-product-detail.pipeline.js';
+import { buildPublicProductPopularPipeline } from '../helpers/public-product-popular.pipeline.js';
 
 type ProductAggregateRow = Parameters<typeof mapPublicProductCards>[0][number];
 
@@ -49,6 +51,14 @@ export class PublicProductService {
   /** Returns the newest publicly visible products. */
   async getNewArrivals(query: PublicProductNewArrivalsQuery): Promise<PublicProductCard[]> {
     const pipeline = buildPublicProductNewArrivalsPipeline(query);
+    const products = await ProductModel.aggregate<ProductAggregateRow>(pipeline).exec();
+
+    return mapPublicProductCards(products);
+  }
+
+  /** Returns publicly visible products ranked by recent views and wishlist additions. */
+  async getPopular(query: PublicProductPopularQuery): Promise<PublicProductCard[]> {
+    const pipeline = buildPublicProductPopularPipeline(query);
     const products = await ProductModel.aggregate<ProductAggregateRow>(pipeline).exec();
 
     return mapPublicProductCards(products);
