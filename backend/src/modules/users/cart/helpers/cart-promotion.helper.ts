@@ -1,4 +1,4 @@
-import type { Types } from 'mongoose';
+import type { ClientSession, Types } from 'mongoose';
 
 import { PromotionModel } from '../../../sellers/promotions/models/promotion.model.js';
 import type { Promotion } from '../../../sellers/promotions/types/promotion.types.js';
@@ -22,6 +22,7 @@ export interface AppliedCartPromotion {
 export async function findBestCartPromotions(
   candidates: CartPromotionCandidate[],
   now: Date = new Date(),
+  session?: ClientSession,
 ): Promise<Map<string, AppliedCartPromotion>> {
   const result = new Map<string, AppliedCartPromotion>();
 
@@ -35,14 +36,18 @@ export async function findBestCartPromotions(
     ).values(),
   ];
 
-  const promotions = await PromotionModel.find({
+  const promotionQuery = PromotionModel.find({
     eligibleProductIds: { $in: productIds },
     status: 'active',
     startsAt: { $lte: now },
     endsAt: { $gt: now },
-  })
-    .lean<Promotion[]>()
-    .exec();
+  }).lean<Promotion[]>();
+
+  if (session) {
+    promotionQuery.session(session);
+  }
+
+  const promotions = await promotionQuery.exec();
 
   for (const candidate of candidates) {
     let bestPromotion: Promotion | null = null;
