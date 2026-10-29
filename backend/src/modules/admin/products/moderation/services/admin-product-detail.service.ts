@@ -9,7 +9,6 @@ import type { Product } from '../../../../sellers/products/management/types/prod
 import type { ProductVariant } from '../../../../sellers/products/variants/types/product-variant.types.js';
 import { StoreModel } from '../../../../sellers/store/models/store.model.js';
 import { UserModel } from '../../../../users/profiles/models/user.model.js';
-import type { CategoryAttribute } from '../../../categories/types/category.types.js';
 import type { AdminProductDetails } from '../types/admin-product-details.types.js';
 import { mapAdminProductDetails } from '../helpers/admin-product-details.mapper.js';
 

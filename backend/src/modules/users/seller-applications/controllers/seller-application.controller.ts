@@ -116,8 +116,12 @@ function getDocumentUploads(req: Parameters<RequestHandler>[0]): SellerApplicati
   const files = (req.files ?? []) as Express.Multer.File[];
 
   return files.map((file, index) => {
-    const fileName = basename(file.originalname.replace(/\\/g, '/'))
-      .replace(/[\u0000-\u001f\u007f]/g, '')
+    const fileName = Array.from(basename(file.originalname.replace(/\\/g, '/')))
+      .filter((character) => {
+        const code = character.charCodeAt(0);
+        return code > 0x1f && code !== 0x7f;
+      })
+      .join('')
       .trim();
 
     if (!fileName || fileName.length > 255) {

@@ -80,8 +80,6 @@ export class AdminStoreService {
       });
     }
 
-    const { _id, sellerId, logo, ...storeFields } = store.toObject();
-
     return this.toAdminStoreDetails(store);
   }
 

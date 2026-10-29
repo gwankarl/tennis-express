@@ -21,8 +21,14 @@ function generateProductImageAltText(
 ): string {
   const fileName = originalFileName.split(/[\\/]/).pop() ?? '';
   const extensionIndex = fileName.lastIndexOf('.');
-  const fileLabel = (extensionIndex > 0 ? fileName.slice(0, extensionIndex) : fileName)
-    .replace(/[\u0000-\u001f\u007f]/g, ' ')
+  const fileLabel = Array.from(
+    extensionIndex > 0 ? fileName.slice(0, extensionIndex) : fileName,
+    (character) => {
+      const code = character.charCodeAt(0);
+      return code <= 0x1f || code === 0x7f ? ' ' : character;
+    },
+  )
+    .join('')
     .replace(/[_-]+/g, ' ')
     .replace(/\s+/g, ' ')
     .trim();
