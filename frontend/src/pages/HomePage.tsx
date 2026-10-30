@@ -1,11 +1,18 @@
-/**
- * Renders the public home page.
- */
+import FeaturedBrandsSection from '../features/brands/components/FeaturedBrandsSection'
+import CategoryTilesSection from '../features/home/components/CategoryTilesSection'
+import HeroSection from '../features/home/components/HeroSection'
+import HomeBenefitsSection from '../features/home/components/HomeBenefitsSection'
+import HomePromotionBannersSection from '../features/home/components/HomePromotionBannersSection'
 
+/** Renders the public homepage. */
 export default function HomePage() {
   return (
-    <section className="rounded-xl border border-border bg-surface p-6 sm:p-8">
-      <h1 className="text-page-title font-bold text-text-primary">Tennis Xpress</h1>
-    </section>
+    <>
+      <HeroSection />
+      <HomeBenefitsSection />
+      <HomePromotionBannersSection />
+      <CategoryTilesSection />
+      <FeaturedBrandsSection />
+    </>
   )
 }

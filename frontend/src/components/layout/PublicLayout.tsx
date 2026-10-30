@@ -4,7 +4,7 @@ import Header from '../navigation/Header'
 /** Provides the shared public header, page area, and footer. */
 export default function PublicLayout() {
   return (
-    <div className="flex min-h-screen flex-col bg-page text-text-primary">
+    <div className="flex min-h-screen flex-col bg-surface text-text-primary">
       <a
         href="#main-content"
         className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-10 focus:rounded-md focus:bg-surface focus:px-4 focus:py-2"
@@ -14,7 +14,10 @@ export default function PublicLayout() {
 
       <Header />
 
-      <main id="main-content" className="mx-auto w-full max-w-7xl flex-1 px-4 py-8 sm:px-6 lg:px-8">
+      <main
+        id="main-content"
+        className="mx-auto w-full max-w-7xl flex-1 px-4 pt-1 pb-8 sm:px-6 lg:px-8"
+      >
         <Outlet />
       </main>
 
